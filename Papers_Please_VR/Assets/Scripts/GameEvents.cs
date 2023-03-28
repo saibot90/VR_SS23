@@ -12,13 +12,23 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    public event Action<int> onTest;
+    public event Action<string> onInfo;
 
-    public void Test(int id)
+    public void Info(string info)
     {
-        if (onTest != null)
+        if (onInfo != null)
         {
-            onTest(id);
+            onInfo(info);
+        }
+    }
+
+    public event Action onTriggerInfo;
+
+    public void TriggerInfo()
+    {
+        if(onTriggerInfo != null)
+        {
+            onTriggerInfo();
         }
     }
 }

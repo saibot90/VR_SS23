@@ -1,0 +1,14 @@
+{
+	"nameList":
+	[
+    		{"name":"Sun"},
+    		{"name":"Mercury"},
+    		{"name":"Venus"},
+    		{"name":"Terre"},
+    		{"name":"Mars"},
+    		{"name":"Jupiter"},
+    		{"name":"Saturn"},
+    		{"name":"Uranus"},
+    		{"name":"Neptune"}
+	]
+}

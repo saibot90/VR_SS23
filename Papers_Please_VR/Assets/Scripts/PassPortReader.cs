@@ -6,6 +6,10 @@ public class PassPortReader : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
+        if(other.tag == "PassPort")
+        {
+            GameEvents.current.TriggerInfo();
+        }
         
     }
 }
