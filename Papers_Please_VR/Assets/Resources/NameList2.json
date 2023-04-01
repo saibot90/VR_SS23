@@ -1,0 +1,28 @@
+{
+	"nameList":
+	[
+    		{"name":"Guenther"},
+		{"name":"Jess"},
+		{"name":"Martin"}
+	],
+	"lastNameList":
+	[
+		{"name":"Luether"},
+		{"name":"Fraciskus"},
+		{"name":"Lauterbach"}
+	],
+	"countryList":
+	[
+		{"name":"Deutschland"},
+		{"name":"Italien"},
+		{"name":"Frankreich"}
+	],
+	"passTypList":
+	[
+		{"name":"P"},
+		{"name":"PC"},
+		{"name":"PP"},
+		{"name":"PO"},
+		{"name":"PD"}
+	]
+}

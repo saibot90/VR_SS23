@@ -301,6 +301,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &950403516 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7929050251957372055, guid: 638823fe100d4c349b3cfa326c5b2c86,
+    type: 3}
+  m_PrefabInstance: {fileID: 1889421845}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1206129472 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7929050251840117540, guid: 638823fe100d4c349b3cfa326c5b2c86,
@@ -508,6 +520,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: PassPort
       objectReference: {fileID: 0}
+    - target: {fileID: 7929050251840117567, guid: 638823fe100d4c349b3cfa326c5b2c86,
+        type: 3}
+      propertyPath: backSideText
+      value: 
+      objectReference: {fileID: 950403516}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 638823fe100d4c349b3cfa326c5b2c86, type: 3}
 --- !u!1001 &3040273366186881032
@@ -576,6 +593,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040273366282145345, guid: e5920bb0a9db7d8468834b8f08e6e0fd,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3040273366282145345, guid: e5920bb0a9db7d8468834b8f08e6e0fd,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5920bb0a9db7d8468834b8f08e6e0fd, type: 3}

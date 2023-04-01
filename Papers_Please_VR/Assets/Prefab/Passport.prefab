@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 7929050251840117567}
   m_Layer: 0
   m_Name: Passport
-  m_TagString: Untagged
+  m_TagString: PassPort
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TextMeshPro: {fileID: 7929050252292687443}
+  backSideText: {fileID: 0}
   m_Picture: {fileID: 7929050252024751704}
 --- !u!1 &7929050251957372057
 GameObject:
