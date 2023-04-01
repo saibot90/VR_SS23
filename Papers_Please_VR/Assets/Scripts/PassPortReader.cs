@@ -12,4 +12,12 @@ public class PassPortReader : MonoBehaviour
         }
         
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "PassPort")
+        {
+            GameEvents.current.Info("Passport Info");
+        }
+    }
 }
