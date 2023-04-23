@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+//using System;
 
 #region Classes
 [System.Serializable]
@@ -62,13 +63,14 @@ public class PassPort : MonoBehaviour
     Vector3Int dateOfcreation;
     Vector3Int dateOfBirth;
     string passType;
+    //DateTime date = new DateTime(2000, 13, 1);
     #endregion
 
     [SerializeField] TextMeshPro m_TextMeshPro;
     [SerializeField] TextMeshPro backSideText;
     [SerializeField] GameObject m_Picture;
     
-    Object [] m_Faces;
+    Material m_Faces;
     string textDataName = "NameList2.json";//"NameList.json";
     string datapath;
     string passInfo;
@@ -76,7 +78,7 @@ public class PassPort : MonoBehaviour
     void Start()
     {
         GameEvents.current.onTriggerInfo += ReaderHit;
-        //m_Faces = Resources.LoadAll("Faces", typeof(Renderer));
+        m_Faces = Resources.Load("Faces/face1") as Material;
 
         //passAge = Random.Range(5, 92);
         expirationDate = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(2015, 2035));
@@ -84,7 +86,7 @@ public class PassPort : MonoBehaviour
         dateOfBirth = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(1920, 2035));
 
         //Debug.Log(m_Faces.Length);
-        //m_Picture.GetComponent<Renderer>().material = (Material) m_Faces[0]; 
+        m_Picture.GetComponent<Renderer>().material = m_Faces; 
         datapath = Application.dataPath + "/Resources/" + textDataName;
 
         Names names;
@@ -131,5 +133,10 @@ public class PassPort : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onTriggerInfo -= ReaderHit;
     }
 }

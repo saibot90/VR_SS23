@@ -31,4 +31,14 @@ public class GameEvents : MonoBehaviour
             onTriggerInfo();
         }
     }
+
+    public event Action onTriggerPassBack;
+
+    public void TriggerPassBack()
+    {
+        if(onTriggerPassBack != null)
+        {
+            onTriggerPassBack();
+        }
+    }
 }
