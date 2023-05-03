@@ -41,4 +41,34 @@ public class GameEvents : MonoBehaviour
             onTriggerPassBack();
         }
     }
+
+    public event Action<PassPortData> onTriggerPassCheck;
+
+    public void TriggerPassCheck(PassPortData pass)
+    {
+        if(onTriggerPassCheck != null)
+        {
+            onTriggerPassCheck(pass);
+        }
+    }
+
+    public event Action<bool> onVisaStatus;
+
+    public void VisaStatus(bool status)
+    {
+        if (onVisaStatus != null)
+        {
+            onVisaStatus(status);
+        }
+    }
+
+    public event Action onSpawnNewPerson;
+
+    public void SpawnNewPerson()
+    {
+        if(onSpawnNewPerson != null)
+        { 
+            onSpawnNewPerson(); 
+        }
+    }
 }

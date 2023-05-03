@@ -55,14 +55,15 @@ public class PassTypes
 public class PassPort : MonoBehaviour
 {
     #region PassInfo
-    string country;
+    PassPortData.Countries country;
     string passName;
     string passLastName;
     int passAge;
     Vector3Int expirationDate;
     Vector3Int dateOfcreation;
     Vector3Int dateOfBirth;
-    string passType;
+    PassPortData.PassportTypes passType;
+    PassPortData.PassportColor passColor;
     //DateTime date = new DateTime(2000, 13, 1);
     #endregion
 
@@ -78,12 +79,17 @@ public class PassPort : MonoBehaviour
     void Start()
     {
         GameEvents.current.onTriggerInfo += ReaderHit;
+        GameEvents.current.onTriggerPassBack += getPassInfo;
         m_Faces = Resources.Load("Faces/face1") as Material;
 
         //passAge = Random.Range(5, 92);
         expirationDate = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(2015, 2035));
         dateOfcreation = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(2015, 2035));
         dateOfBirth = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(1920, 2035));
+        country = (PassPortData.Countries) Random.Range(1, 3); //Anpassen wenn Laenderliste erweitert wird
+        passType = (PassPortData.PassportTypes)Random.Range(1, 5);
+        passColor = (PassPortData.PassportColor)Random.Range(1, 5);
+
 
         //Debug.Log(m_Faces.Length);
         m_Picture.GetComponent<Renderer>().material = m_Faces; 
@@ -106,27 +112,28 @@ public class PassPort : MonoBehaviour
             passName = names.nameList[rand].name;
             rand = Random.Range(0, lastNames.lastNameList.Length - 1);
             passLastName = lastNames.lastNameList[rand].name;
-            rand = Random.Range(0, countrys.countryList.Length - 1);
-            country = countrys.countryList[rand].name;
-            rand = Random.Range(0, passTypes.passTypList.Length - 1);
-            passType = passTypes.passTypList[rand].name;
         }
         else
         {
             Debug.Log("Cannot Read PlanetList");
         }
 
-        m_TextMeshPro.text = "Type " + passType + "<br><br>";
+        m_TextMeshPro.text = "Type " + passType.ToString() + "<br><br>";
         m_TextMeshPro.text += "Name " + passLastName + "     Vorname " + passName + "<br><br>";
         m_TextMeshPro.text += "Geburtsdatum " + dateOfBirth + "<br><br>";
         m_TextMeshPro.text += "Ablaufdatum "+ expirationDate + "<br><br>" + "Erstelldatum " + dateOfcreation;
         passInfo = m_TextMeshPro.text;
-        backSideText.text = country;
+        backSideText.text = country.ToString();
     }
 
     void ReaderHit()
     {
         GameEvents.current.Info(passInfo);
+    }
+
+    void getPassInfo()
+    {
+        GameEvents.current.TriggerPassCheck(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor));
     }
 
     // Update is called once per frame
@@ -138,5 +145,6 @@ public class PassPort : MonoBehaviour
     private void OnDestroy()
     {
         GameEvents.current.onTriggerInfo -= ReaderHit;
+        GameEvents.current.onTriggerPassBack -= getPassInfo;
     }
 }

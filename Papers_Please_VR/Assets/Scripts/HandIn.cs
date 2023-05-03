@@ -17,14 +17,9 @@ public class HandIn : MonoBehaviour
         
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "PassPort")
+        if(other.tag == "PassPort") //Pass und Visa muessen in Trigger liegen
         {
             StartCoroutine(startCountdownForHandIn());
         }
@@ -44,6 +39,7 @@ public class HandIn : MonoBehaviour
         if (!isActive) {
             isActive = true;
             yield return new WaitForSeconds(5);
+            Debug.Log("Do he be waiting");
             GameEvents.current.TriggerPassBack();
         }
         

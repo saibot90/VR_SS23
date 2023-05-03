@@ -25,9 +25,14 @@ public class GameManager : MonoBehaviour
 
     private float deltaTime = 0.0f;
 
+    [SerializeField] private GameObject person;
+    GameObject currentPerson;
+    [SerializeField] private Transform personStart;
+
     // Start is called before the first frame update
     void Start()
     {
+        GameEvents.current.onSpawnNewPerson += spawnPerson;
         int ttt = 4;
         currentPpTypesDenied.Add(PassPortData.PassportTypes.None);
         PassPortData test = new PassPortData(Countries.Germany, "Dieter", "Müller", new Vector3Int(30, 12, 2035), 
@@ -155,6 +160,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("valid passport type " + accepted);
 
         return accepted;
+    }
+
+    void spawnPerson()
+    {
+        Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
+        currentPerson = Instantiate(person, start, Quaternion.identity);
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onSpawnNewPerson -= spawnPerson;
     }
 
 }

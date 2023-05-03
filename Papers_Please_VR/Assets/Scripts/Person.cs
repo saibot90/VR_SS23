@@ -58,31 +58,33 @@ public class Person : MonoBehaviour
                 // Fraction of journey completed equals current distance divided by total distance.
                 float fractionOfJourneyPass = distCovered / journeyLengthPass;
                 float fractionOfJourneyVisa = distCovered / journeyLengthVisa;
-                if(passPortObject.GetComponentInChildren<Rigidbody>().useGravity == false) 
+                if(passPortObject != null && passPortObject.GetComponentInChildren<Rigidbody>().useGravity == false) 
                 {
                     passPortObject.transform.position = Vector3.Lerp(passPortStart, passPortStop, fractionOfJourneyPass);
                 }
                 
-                if(visaObject.GetComponent<Rigidbody>().useGravity == false)
+                if(visaObject != null && visaObject.GetComponent<Rigidbody>().useGravity == false)
                 {
                     visaObject.transform.position = Vector3.Lerp(visaStart, visaStop, fractionOfJourneyVisa);
                 }
                 
 
-                if (passPortObject.transform.position == passPosition.position)
+                if (passPortObject != null && passPortObject.transform.position == passPosition.position)
                 {
                     passPortObject.GetComponentInChildren<Rigidbody>().useGravity = true;
                 }
-                if (visaObject.transform.position == visaPosition.position)
+
+                if (visaObject != null && visaObject.transform.position == visaPosition.position)
                 {
                     visaObject.GetComponent<Rigidbody>().useGravity = true;
                 }
 
-                if (passPortObject.transform.position == passPortStop && gotBack)
+                if (passPortObject != null && (passPortObject.transform.position == passPortStop) && gotBack)
                 {
                     Destroy(passPortObject);
                 }
-                if (visaObject.transform.position == passPortStop && gotBack)
+
+                if (visaObject != null && (visaObject.transform.position == visaStop) && gotBack)
                 {
                     Destroy(visaObject);
                     index++;
@@ -90,6 +92,7 @@ public class Person : MonoBehaviour
             }
             else
             {
+                GameEvents.current.SpawnNewPerson();
                 Destroy(gameObject);
             }
         }
@@ -125,11 +128,15 @@ public class Person : MonoBehaviour
 
     void getPassBack()
     {
-        passPortObject.GetComponentInChildren<Rigidbody>().useGravity = false;
         passPortStart = passPortObject.transform.position;
+        visaStart = visaObject.transform.position;
         passPortStop = new Vector3 (transform.position.x, transform.position.y, transform.position.z + 0.2f);
         visaStop = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.2f);
+        passPortObject.GetComponentInChildren<Rigidbody>().useGravity = false;
+        visaObject.GetComponent<Rigidbody>().useGravity = false;
         gotBack = true;
+        startTime = Time.time;
+        //deactivate grabbable Object
     }
 
     public GameObject getPassPort() { return passPortObject; }
