@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using TMPro;
 using static PassPortData;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +13,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Material glowWrong;
     [SerializeField] private Material glowNone;
     [SerializeField] private GameObject checkLight;
+    [SerializeField] private TextMeshPro ruleTableCountriesText;
+    [SerializeField] private TextMeshPro ruleTableAdditionText;
 
     [SerializeField] private CheckStatus checkPassport = CheckStatus.None;
+    [SerializeField] private bool checkRules = false;
 
     [SerializeField] private GameObject person;
     GameObject currentPerson;
@@ -39,12 +45,14 @@ public class GameManager : MonoBehaviour
 
     private List<Countries> currentCountryDenied = new List<Countries>();
 
-    private List<PassPortData.PassportTypes> currentPpTypesDenied = new List<PassPortData.PassportTypes>();
+    private List<PassportTypes> currentPpTypesDenied = new List<PassportTypes>();
 
     private float deltaTime = 0.0f;
 
     private PassPortData test = new PassPortData(Countries.Germany, "Dieter", "Müller", new Vector3Int(30, 12, 2035),
-            new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassPortData.PassportTypes.P, PassportColor.Red);
+            new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red);
+
+    private int timesRulesChanged = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -75,7 +83,7 @@ public class GameManager : MonoBehaviour
         {
             //deltaTime = 0.0f;
             //checkPassport = CheckStatus.None;
-            Debug.Log(checkPassport);
+            //Debug.Log(checkPassport);
         }
         else
         {
@@ -83,6 +91,12 @@ public class GameManager : MonoBehaviour
         }
 
         ChangeCheckLight(checkPassport);
+
+        if (checkRules)
+        {
+            newDay();
+            checkRules = false;
+        }
     }
 
     /**
@@ -101,6 +115,64 @@ public class GameManager : MonoBehaviour
             currentDay[1] = 1;
             currentDay[2]++;
         }
+    }
+
+    private void newDay()
+    {
+        timesRulesChanged++;
+        // entferne Regel
+        if (Random.Range(0, 100) <= 33)
+        {
+            int random = Random.Range(0, 100);
+            switch (random)
+            {
+                case <= 60:
+                    Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
+                    Countries countryToRemove = (Countries)Random.Range(1, (int)lastCountry);
+                    currentCountryDenied.Remove(countryToRemove);
+                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "removed " + countryToRemove);
+                    break;
+                case > 60:
+                    PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
+                    PassportTypes typeToRemove = (PassportTypes)Random.Range(1, (int)lastType);
+                    currentPpTypesDenied.Remove(typeToRemove);
+                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "removed " + typeToRemove);
+                    break;
+            }
+        }
+
+        // fuege Regel hinzu
+        if (Random.Range(0, 100) <= 33)
+        {
+            int random = Random.Range(0, 100);
+            switch (random)
+            {
+                case <= 60:
+                    Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
+                    Countries countryToAdd = (Countries)Random.Range(1, (int)lastCountry);
+                    if (currentCountryDenied.IndexOf(countryToAdd) == -1)
+                    {
+                        currentCountryDenied.Add(countryToAdd);
+                    }
+                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "added " + countryToAdd);
+                    break;
+                case > 60:
+                    PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
+                    PassportTypes typeToAdd = (PassportTypes)Random.Range(1, (int)lastType);
+                    if (currentPpTypesDenied.IndexOf(typeToAdd) == -1)
+                    {
+                        currentPpTypesDenied.Add(typeToAdd);
+                    }
+                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "added " + typeToAdd);
+                    break;
+            }
+        }
+
+        ruleTableCountriesText.text = string.Join("\n", currentCountryDenied);
+        ruleTableAdditionText.text = string.Join(", ", currentPpTypesDenied);
+        
+        Debug.Log("Durschlauf: " + timesRulesChanged + " " + string.Join(", ", currentCountryDenied));
+        Debug.Log("Durschlauf: " + timesRulesChanged + " " + string.Join(", ", currentPpTypesDenied));
     }
 
     private void ChangeCheckLight(CheckStatus checkStatus)
@@ -155,7 +227,7 @@ public class GameManager : MonoBehaviour
             passPortData.DateOfCreation[0] > currentDay[0]) { return CheckStatus.Wrong; }
 
         // Check if the date of birth of passport is after the current date
-        if (passPortData.DateOfBirth[2] > currentDay[2]) { return CheckStatus.Wrong; ; }
+        if (passPortData.DateOfBirth[2] > currentDay[2]) { return CheckStatus.Wrong; }
 
         if (passPortData.DateOfBirth[2] == currentDay[2] &&
             passPortData.DateOfBirth[1] > currentDay[1]) { return CheckStatus.Wrong; }
