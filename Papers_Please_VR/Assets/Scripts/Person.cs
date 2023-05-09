@@ -34,7 +34,7 @@ public class Person : MonoBehaviour
     private float journeyLengthPass;
     private float journeyLengthVisa;
 
-    private void Awake()
+    private void Start()
     {
         GameEvents.current.onTriggerPassBack += getPassBack;
         navMeshAgend = GetComponent<NavMeshAgent>();
@@ -48,7 +48,7 @@ public class Person : MonoBehaviour
         
         if (transform.position.x == movePositionTransform[index].position.x && transform.position.z == movePositionTransform[index].position.z)
         {
-            if (index == 0)
+            if (index == (movePositionTransform.Length - 2))
             {
                 spawnPass();
 
@@ -87,13 +87,18 @@ public class Person : MonoBehaviour
                 if (visaObject != null && (visaObject.transform.position == visaStop) && gotBack)
                 {
                     Destroy(visaObject);
-                    index++;
+                    index = (movePositionTransform.Length - 1);
                 }
             }
             else
             {
-                GameEvents.current.SpawnNewPerson();
-                Destroy(gameObject);
+                if (index == (movePositionTransform.Length - 1))
+                {
+                    GameEvents.current.SpawnNewPerson();
+                    Destroy(gameObject);
+                }
+                else index++;
+                
             }
         }
 

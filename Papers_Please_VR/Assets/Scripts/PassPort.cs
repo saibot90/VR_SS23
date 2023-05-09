@@ -4,6 +4,7 @@ using TMPro;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using Random = UnityEngine.Random;
 //using System;
 
 #region Classes
