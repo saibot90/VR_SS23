@@ -8,7 +8,7 @@ public class HandIn : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameEvents.current.onSpawnNewPerson += ResetHandIn;
     }
 
     // Update is called once per frame
@@ -43,5 +43,10 @@ public class HandIn : MonoBehaviour
             GameEvents.current.TriggerPassBack();
         }
         
+    }
+
+    void ResetHandIn()
+    {
+        isActive = false;
     }
 }
