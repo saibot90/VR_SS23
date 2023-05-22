@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviour
     private int scoreTest = 0;
     private readonly List<Score> _scores = new List<Score>();
     private readonly Score _scoreToday = new Score();
-    private Material _checklightMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -73,7 +72,6 @@ public class GameManager : MonoBehaviour
         //scores.Add(new Score(4, 8));
         //scores.Add(new Score(10, 10));
         ShowScore();
-        _checklightMaterial = checkLight.GetComponent<MeshRenderer>().material;
     }
 
     // Update is called once per frame
@@ -267,13 +265,14 @@ public class GameManager : MonoBehaviour
 
     private void ChangeCheckLight(CheckStatus checkStatus)
     {
-        _checklightMaterial = checkStatus switch
+        Material checklightMaterial = checkStatus switch
         {
             CheckStatus.None => glowNone,
             CheckStatus.Correct => glowCorrect,
             CheckStatus.Wrong => glowWrong,
-            _ => _checklightMaterial
+            _ => throw new ArgumentOutOfRangeException(nameof(checkStatus), checkStatus, null)
         };
+        checkLight.GetComponent<MeshRenderer>().material = checklightMaterial;
     }
 
     private CheckStatus PassportCheck(PassPortData passPortData)
