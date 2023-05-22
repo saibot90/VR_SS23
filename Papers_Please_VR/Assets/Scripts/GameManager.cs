@@ -343,7 +343,7 @@ public class GameManager : MonoBehaviour
     void spawnPerson()
     {
         Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
-        _currentPerson = Instantiate(person, start, Quaternion.identity);
+        _currentPerson = Instantiate(person, start, Quaternion.Euler(0,180,0));
     }
 
     private void OnDestroy()

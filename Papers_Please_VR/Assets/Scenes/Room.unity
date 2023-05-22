@@ -3271,8 +3271,13 @@ MonoBehaviour:
   checkLight: {fileID: 1611344198}
   ruleTableCountriesText: {fileID: 0}
   ruleTableAdditionText: {fileID: 0}
+  totalScoreText: {fileID: 0}
+  yesterdayScoreText: {fileID: 0}
+  beforeYesterdayScoreText: {fileID: 0}
   checkPassport: 0
+  addScoreStatus: 0
   checkRules: 0
+  forceNextDay: 0
   person: {fileID: 5345262607702375345, guid: def4c577580ce8645afb8da801034572, type: 3}
   personStart: {fileID: 934352813}
 --- !u!1 &1112709097
@@ -4148,7 +4153,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296054681}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
