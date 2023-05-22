@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,7 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool forceNextDay = false;
 
     [SerializeField] private GameObject person;
-    GameObject currentPerson;
+    GameObject _currentPerson;
     [SerializeField] private Transform personStart;
 
     [Flags]
@@ -44,23 +43,24 @@ public class GameManager : MonoBehaviour
         Wrong = 2
     }
 
-    private Vector3Int currentDay = new Vector3Int(23, 4, 2023);
+    private Vector3Int _currentDay = new Vector3Int(23, 4, 2023);
 
-    private Rules currentRules = Rules.None;
+    private Rules _currentRules = Rules.None;
 
-    private List<Countries> currentCountryDenied = new List<Countries>();
+    private readonly List<Countries> _currentCountryDenied = new List<Countries>();
 
-    private List<PassportTypes> currentPpTypesDenied = new List<PassportTypes>();
+    private readonly List<PassportTypes> _currentPpTypesDenied = new List<PassportTypes>();
 
-    private float deltaTime = 0.0f;
+    private float _deltaTime = 0.0f;
 
-    private PassPortData test = new PassPortData(Countries.Germany, "Dieter", "Mueller", new Vector3Int(30, 12, 2035),
+    private PassPortData _test = new PassPortData(Countries.Germany, "Dieter", "Mueller", new Vector3Int(30, 12, 2035),
             new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red);
 
-    private int timesRulesChanged = 0;
+    private int _timesRulesChanged = 0;
     private int scoreTest = 0;
-    private List<Score> scores = new List<Score>();
-    private Score scoreToday = new Score();
+    private readonly List<Score> _scores = new List<Score>();
+    private readonly Score _scoreToday = new Score();
+    private Material _checklightMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
         //scores.Add(new Score(4, 8));
         //scores.Add(new Score(10, 10));
         ShowScore();
+        _checklightMaterial = checkLight.GetComponent<MeshRenderer>().material;
     }
 
     // Update is called once per frame
@@ -90,8 +91,8 @@ public class GameManager : MonoBehaviour
         //    nextDay();
         //    Debug.Log(currentDay.ToString());
         //}
-        deltaTime += Time.deltaTime;
-        if (deltaTime > 3.0f)
+        _deltaTime += Time.deltaTime;
+        if (_deltaTime > 3.0f)
         {
             //deltaTime = 0.0f;
             //checkPassport = CheckStatus.None;
@@ -99,26 +100,26 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            checkPassport = PassportCheck(test);
+            checkPassport = PassportCheck(_test);
         }
         if (addScoreStatus != checkPassport)
         {
             addScoreStatus = checkPassport;
             AddScore(addScoreStatus);
-            Debug.Log("Correct: " + scoreToday.Correct + " Total: " + scoreToday.Total + "\n");
+            Debug.Log("Correct: " + _scoreToday.Correct + " Total: " + _scoreToday.Total + "\n");
         }
 
         ChangeCheckLight(checkPassport);
 
         if (checkRules)
         {
-            newDay();
+            NewDay();
             checkRules = false;
         }
         if (forceNextDay)
         {
-            scores.Add(new Score(scoreToday.Correct, scoreToday.Total));
-            scoreToday.Reset();
+            _scores.Add(new Score(_scoreToday.Correct, _scoreToday.Total));
+            _scoreToday.Reset();
             ShowScore();
             forceNextDay = false;
         }
@@ -127,12 +128,12 @@ public class GameManager : MonoBehaviour
     private void ShowScore()
     {
         // Score Yesterday
-        if (scores.Count >= 1)
+        if (_scores.Count >= 1)
         {
             yesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
-            + "<align=\"right\">" + scores.ElementAt(scores.Count - 1).Correct.Monospace("0.6em")
+            + "<align=\"right\">" + _scores.ElementAt(_scores.Count - 1).Correct.Monospace("0.6em")
             + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
-            + scores.ElementAt(scores.Count - 1).Total.Monospace("0.6em") + "<line-height=1em>";
+            + _scores.ElementAt(_scores.Count - 1).Total.Monospace("0.6em") + "<line-height=1em>";
         }
         else
         {
@@ -142,12 +143,12 @@ public class GameManager : MonoBehaviour
             + "<align=\"right\">" + 0 + "<line-height=1em>";
         }
         // Score before Yesterday
-        if (scores.Count >= 2)
+        if (_scores.Count >= 2)
         {
             beforeYesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
-            + "<align=\"right\">" + scores.ElementAt(scores.Count - 2).Correct.Monospace("0.6em")
+            + "<align=\"right\">" + _scores.ElementAt(_scores.Count - 2).Correct.Monospace("0.6em")
             + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
-            + scores.ElementAt(scores.Count - 2).Total.Monospace("0.6em") + "<line-height=1em>";
+            + _scores.ElementAt(_scores.Count - 2).Total.Monospace("0.6em") + "<line-height=1em>";
         } 
         else
         {
@@ -161,7 +162,7 @@ public class GameManager : MonoBehaviour
         int correctTotal = 0;
         int totalTotal = 0;
 
-        foreach (var score in scores)
+        foreach (var score in _scores)
         {
             correctTotal += score.Correct;
             totalTotal += score.Total;
@@ -177,25 +178,25 @@ public class GameManager : MonoBehaviour
     /**
      * Sets the day to the next one
      */
-    private void nextDay()
+    private void NextDay()
     {
-        currentDay[0]++;
-        if (currentDay[0] > 30)
+        _currentDay[0]++;
+        if (_currentDay[0] > 30)
         {
-            currentDay[0] = 1;
-            currentDay[1]++;
+            _currentDay[0] = 1;
+            _currentDay[1]++;
         }
-        if (currentDay[1] > 12)
+        if (_currentDay[1] > 12)
         {
-            currentDay[1] = 1;
-            currentDay[2]++;
+            _currentDay[1] = 1;
+            _currentDay[2]++;
         }
     }
 
-    private void newDay()
+    private void NewDay()
     {
-        timesRulesChanged++;
-        // entferne Regel
+        _timesRulesChanged++;
+        // delete rules
         if (Random.Range(0, 100) <= 33)
         {
             int random = Random.Range(0, 100);
@@ -204,19 +205,19 @@ public class GameManager : MonoBehaviour
                 case <= 60:
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
                     Countries countryToRemove = (Countries)Random.Range(1, (int)lastCountry);
-                    currentCountryDenied.Remove(countryToRemove);
-                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "removed " + countryToRemove);
+                    _currentCountryDenied.Remove(countryToRemove);
+                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "removed " + countryToRemove);
                     break;
                 case > 60:
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
                     PassportTypes typeToRemove = (PassportTypes)Random.Range(1, (int)lastType);
-                    currentPpTypesDenied.Remove(typeToRemove);
-                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "removed " + typeToRemove);
+                    _currentPpTypesDenied.Remove(typeToRemove);
+                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "removed " + typeToRemove);
                     break;
             }
         }
 
-        // fuege Regel hinzu
+        // add rules
         if (Random.Range(0, 100) <= 33)
         {
             int random = Random.Range(0, 100);
@@ -225,29 +226,29 @@ public class GameManager : MonoBehaviour
                 case <= 60:
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
                     Countries countryToAdd = (Countries)Random.Range(1, (int)lastCountry);
-                    if (currentCountryDenied.IndexOf(countryToAdd) == -1)
+                    if (_currentCountryDenied.IndexOf(countryToAdd) == -1)
                     {
-                        currentCountryDenied.Add(countryToAdd);
+                        _currentCountryDenied.Add(countryToAdd);
                     }
-                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "added " + countryToAdd);
+                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "added " + countryToAdd);
                     break;
                 case > 60:
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
                     PassportTypes typeToAdd = (PassportTypes)Random.Range(1, (int)lastType);
-                    if (currentPpTypesDenied.IndexOf(typeToAdd) == -1)
+                    if (_currentPpTypesDenied.IndexOf(typeToAdd) == -1)
                     {
-                        currentPpTypesDenied.Add(typeToAdd);
+                        _currentPpTypesDenied.Add(typeToAdd);
                     }
-                    Debug.Log("Durschlauf: " + timesRulesChanged + " " + "added " + typeToAdd);
+                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "added " + typeToAdd);
                     break;
             }
         }
 
-        ruleTableCountriesText.text = string.Join("\n", currentCountryDenied);
-        ruleTableAdditionText.text = string.Join(", ", currentPpTypesDenied);
+        ruleTableCountriesText.text = string.Join("\n", _currentCountryDenied);
+        ruleTableAdditionText.text = string.Join(", ", _currentPpTypesDenied);
         
-        Debug.Log("Durschlauf: " + timesRulesChanged + " " + string.Join(", ", currentCountryDenied));
-        Debug.Log("Durschlauf: " + timesRulesChanged + " " + string.Join(", ", currentPpTypesDenied));
+        Debug.Log("Durchlauf: " + _timesRulesChanged + " " + string.Join(", ", _currentCountryDenied));
+        Debug.Log("Durchlauf: " + _timesRulesChanged + " " + string.Join(", ", _currentPpTypesDenied));
     }
 
     private void AddScore(CheckStatus checkStatus)
@@ -255,32 +256,27 @@ public class GameManager : MonoBehaviour
         switch (checkStatus)
         {
             case CheckStatus.Correct:
-                scoreToday.Correct++;
-                scoreToday.Total++;
+                _scoreToday.Correct++;
+                _scoreToday.Total++;
                 break;
             case CheckStatus.Wrong:
-                scoreToday.Total++;
+                _scoreToday.Total++;
                 break;
         }
     }
 
     private void ChangeCheckLight(CheckStatus checkStatus)
     {
-        switch (checkStatus)
+        _checklightMaterial = checkStatus switch
         {
-            case CheckStatus.None:
-                checkLight.GetComponent<MeshRenderer>().material = glowNone;
-                break;
-            case CheckStatus.Correct:
-                checkLight.GetComponent<MeshRenderer>().material = glowCorrect;
-                break;
-            case CheckStatus.Wrong:
-                checkLight.GetComponent<MeshRenderer>().material = glowWrong;
-                break;
-        }
+            CheckStatus.None => glowNone,
+            CheckStatus.Correct => glowCorrect,
+            CheckStatus.Wrong => glowWrong,
+            _ => _checklightMaterial
+        };
     }
 
-    CheckStatus PassportCheck(PassPortData passPortData)
+    private CheckStatus PassportCheck(PassPortData passPortData)
     {
         // Check if passportData is null
         if (passPortData == null) { return CheckStatus.Wrong; }
@@ -296,59 +292,59 @@ public class GameManager : MonoBehaviour
         if (passPortData.DateOfBirth[1] < 1 || passPortData.DateOfBirth[1] > 12) { return CheckStatus.Wrong; }
 
         // Check if expiration date of passport is before the current date
-        if (passPortData.ExpirationDate[2] < currentDay[2]) { return CheckStatus.Wrong; }
+        if (passPortData.ExpirationDate[2] < _currentDay[2]) { return CheckStatus.Wrong; }
 
-        if (passPortData.ExpirationDate[2] == currentDay[2] &&
-            passPortData.ExpirationDate[1] < currentDay[1]) { return CheckStatus.Wrong; }
+        if (passPortData.ExpirationDate[2] == _currentDay[2] &&
+            passPortData.ExpirationDate[1] < _currentDay[1]) { return CheckStatus.Wrong; }
 
-        if (passPortData.ExpirationDate[2] == currentDay[2] &&
-            passPortData.ExpirationDate[1] == currentDay[1] &&
-            passPortData.ExpirationDate[0] < currentDay[0]) { return CheckStatus.Wrong; }
+        if (passPortData.ExpirationDate[2] == _currentDay[2] &&
+            passPortData.ExpirationDate[1] == _currentDay[1] &&
+            passPortData.ExpirationDate[0] < _currentDay[0]) { return CheckStatus.Wrong; }
 
         // Check if the date of creation of passport is after the current date
-        if (passPortData.DateOfCreation[2] > currentDay[2]) { return CheckStatus.Wrong; }
+        if (passPortData.DateOfCreation[2] > _currentDay[2]) { return CheckStatus.Wrong; }
 
-        if (passPortData.DateOfCreation[2] == currentDay[2] &&
-            passPortData.DateOfCreation[1] > currentDay[1]) { return CheckStatus.Wrong; }
+        if (passPortData.DateOfCreation[2] == _currentDay[2] &&
+            passPortData.DateOfCreation[1] > _currentDay[1]) { return CheckStatus.Wrong; }
 
-        if (passPortData.DateOfCreation[2] == currentDay[2] &&
-            passPortData.DateOfCreation[1] == currentDay[1] &&
-            passPortData.DateOfCreation[0] > currentDay[0]) { return CheckStatus.Wrong; }
+        if (passPortData.DateOfCreation[2] == _currentDay[2] &&
+            passPortData.DateOfCreation[1] == _currentDay[1] &&
+            passPortData.DateOfCreation[0] > _currentDay[0]) { return CheckStatus.Wrong; }
 
         // Check if the date of birth of passport is after the current date
-        if (passPortData.DateOfBirth[2] > currentDay[2]) { return CheckStatus.Wrong; }
+        if (passPortData.DateOfBirth[2] > _currentDay[2]) { return CheckStatus.Wrong; }
 
-        if (passPortData.DateOfBirth[2] == currentDay[2] &&
-            passPortData.DateOfBirth[1] > currentDay[1]) { return CheckStatus.Wrong; }
+        if (passPortData.DateOfBirth[2] == _currentDay[2] &&
+            passPortData.DateOfBirth[1] > _currentDay[1]) { return CheckStatus.Wrong; }
 
-        if (passPortData.DateOfBirth[2] == currentDay[2] &&
-            passPortData.DateOfBirth[1] == currentDay[1] &&
-            passPortData.DateOfBirth[0] > currentDay[0]) { return CheckStatus.Wrong; }
+        if (passPortData.DateOfBirth[2] == _currentDay[2] &&
+            passPortData.DateOfBirth[1] == _currentDay[1] &&
+            passPortData.DateOfBirth[0] > _currentDay[0]) { return CheckStatus.Wrong; }
 
         // Check if Passport has the right Color
 
         if ((int)passPortData.PassType != (int)passPortData.PassColor) { return CheckStatus.Wrong; }
 
         // Check if country is forbidden
-        if (currentRules == Rules.Land)
+        if (_currentRules == Rules.Land)
         {
-            if (currentCountryDenied.Contains(passPortData.Country)) { return CheckStatus.Wrong; }
+            if (_currentCountryDenied.Contains(passPortData.Country)) { return CheckStatus.Wrong; }
         }
 
         // Check if passport type is forbidden
-        if (currentRules == Rules.PassType)
+        if (_currentRules == Rules.PassType)
         {
-            if (currentPpTypesDenied.Contains(passPortData.PassType)) { return CheckStatus.Wrong; }
+            if (_currentPpTypesDenied.Contains(passPortData.PassType)) { return CheckStatus.Wrong; }
         }
 
 
-        return CheckStatus.Correct; ;
+        return CheckStatus.Correct;
     }
 
     void spawnPerson()
     {
         Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
-        currentPerson = Instantiate(person, start, Quaternion.identity);
+        _currentPerson = Instantiate(person, start, Quaternion.identity);
     }
 
     private void OnDestroy()

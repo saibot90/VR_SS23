@@ -1,43 +1,36 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HandIn : MonoBehaviour
 {
-    bool isActive = false;
+    private bool _isActive = false;
     // Start is called before the first frame update
     void Start()
     {
         GameEvents.current.onSpawnNewPerson += ResetHandIn;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "PassPort") //Pass und Visa muessen in Trigger liegen
+        if(other.CompareTag("PassPort")) //Pass und Visa muessen in Trigger liegen
         {
-            StartCoroutine(startCountdownForHandIn());
+            StartCoroutine(StartCountdownForHandIn());
         }
         
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "PassPort")
+        if (other.CompareTag("PassPort"))
         {
-            StopCoroutine(startCountdownForHandIn());
+            StopCoroutine(StartCountdownForHandIn());
         }
     }
 
-    IEnumerator startCountdownForHandIn()
+    private IEnumerator StartCountdownForHandIn()
     {
-        if (!isActive) {
-            isActive = true;
+        if (!_isActive) {
+            _isActive = true;
             yield return new WaitForSeconds(5);
             Debug.Log("Do he be waiting");
             GameEvents.current.TriggerPassBack();
@@ -45,8 +38,8 @@ public class HandIn : MonoBehaviour
         
     }
 
-    void ResetHandIn()
+    private void ResetHandIn()
     {
-        isActive = false;
+        _isActive = false;
     }
 }

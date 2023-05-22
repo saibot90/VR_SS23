@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -9,26 +7,20 @@ public class EntryVisa : MonoBehaviour
     [SerializeField] private string deniedTag;
     [SerializeField] private TextMeshProUGUI approveText;
 
-    private Color32 approvedColor = new Color32(0, 185, 59, 255);
-    private Color32 deniedColor = new Color32(255, 0, 0, 255);
+    private readonly Color32 _approvedColor = new Color32(0, 185, 59, 255);
+    private readonly Color32 _deniedColor = new Color32(255, 0, 0, 255);
 
-    bool status = false;
+    private bool _status = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onTriggerPassBack += getVisaStatus;
+        GameEvents.current.onTriggerPassBack += GetVisaStatus;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void GetVisaStatus()
     {
-        
-    }
-
-    void getVisaStatus()
-    {
-        GameEvents.current.VisaStatus(status);
+        GameEvents.current.VisaStatus(_status);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,14 +28,14 @@ public class EntryVisa : MonoBehaviour
         if (other.gameObject.CompareTag(approvedTag))
         {
             approveText.text = "Approved";
-            approveText.color = approvedColor;
-            status = true;
+            approveText.color = _approvedColor;
+            _status = true;
         }
         if (other.gameObject.CompareTag(deniedTag))
         {
             approveText.text = "Denied";
-            approveText.color = deniedColor;
-            status = false;
+            approveText.color = _deniedColor;
+            _status = false;
         }
     }
 }
