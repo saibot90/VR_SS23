@@ -23,6 +23,11 @@ public class Person : MonoBehaviour
     GameObject visaObject;
     bool gotBack = false;
 
+    Quaternion from;
+    Quaternion to;
+
+    float speedTurning = 1f;
+    float timeCount = 0.0f;
 
     // Movement speed in units per second.
     public float speed = 1.0F;
@@ -36,21 +41,32 @@ public class Person : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.current.onTriggerPassBack += getPassBack;
+        GameEvents.current.onTriggerPassBack += GetPassBack;
         navMeshAgend = GetComponent<NavMeshAgent>();
         passPortStop = passPosition.position;
         visaStop = visaPosition.position;
+        from = transform.rotation;
+        to = Quaternion.Euler(0,90,0);
     }
 
     private void Update()
     {
         navMeshAgend.destination = movePositionTransform[index].position;
-        
+
+
+        if (index == 1 || index == 2)
+        {
+            transform.rotation = Quaternion.Lerp(from, to, timeCount * speedTurning);
+            timeCount = timeCount + Time.deltaTime;
+        }
+
         if (transform.position.x == movePositionTransform[index].position.x && transform.position.z == movePositionTransform[index].position.z)
         {
+            
+
             if (index == (movePositionTransform.Length - 2))
             {
-                spawnPass();
+                SpawnPass();
 
                 // Distance moved equals elapsed time times speed..
                 float distCovered = (Time.time - startTime) * speed;
@@ -88,6 +104,11 @@ public class Person : MonoBehaviour
                 {
                     Destroy(visaObject);
                     index = (movePositionTransform.Length - 1);
+                    from = transform.rotation;
+                    timeCount = 0.0f;
+                    to = Quaternion.Euler(0,180,0);
+                    transform.rotation = Quaternion.Lerp(from, to, timeCount * speedTurning);
+                    timeCount = timeCount + Time.deltaTime;
                 }
             }
             else
@@ -104,19 +125,26 @@ public class Person : MonoBehaviour
 
     }
 
-    void nextPerson()
+    void turning()
+    {   
+        
+    }
+
+    void NextPerson()
     {
         index++;
     }
 
-    void spawnPass()
+    void SpawnPass()
     {
         if(!isActive)
         {
             isActive = true;
             passPort.GetComponentInChildren<Rigidbody>().useGravity = false;
             visa.GetComponent<Rigidbody>().useGravity = false;
-            Vector3 pos = new Vector3(transform.position.x, 0.914f, transform.position.z);
+            var transform1 = transform;
+            var position1 = transform1.position;
+            Vector3 pos = new Vector3(position1.x, 0.914f, position1.z);
             passPortObject = Instantiate(passPort, pos + new Vector3 (0, 0, 0.2f), Quaternion.Euler(90, 90, 0));
             visaObject = Instantiate(visa, pos - new Vector3(0, 0, 0.2f), Quaternion.Euler(-90, 90, 0));
             passPortStart = passPortObject.transform.position;
@@ -125,18 +153,21 @@ public class Person : MonoBehaviour
             startTime = Time.time;
 
             // Calculate the journey length.
-            journeyLengthPass = Vector3.Distance(passPortStart, passPosition.position);
-            journeyLengthVisa = Vector3.Distance(passPortStart, passPosition.position);
+            var position = passPosition.position;
+            journeyLengthPass = Vector3.Distance(passPortStart, position);
+            journeyLengthVisa = Vector3.Distance(passPortStart, position);
 
         }
     }
 
-    void getPassBack()
+    void GetPassBack()
     {
         passPortStart = passPortObject.transform.position;
         visaStart = visaObject.transform.position;
-        passPortStop = new Vector3 (transform.position.x, transform.position.y, transform.position.z + 0.2f);
-        visaStop = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.2f);
+        var transform1 = transform;
+        var position = transform1.position;
+        passPortStop = new Vector3 (position.x, position.y, position.z + 0.2f);
+        visaStop = new Vector3(position.x, position.y, position.z - 0.2f);
         passPortObject.GetComponentInChildren<Rigidbody>().useGravity = false;
         visaObject.GetComponent<Rigidbody>().useGravity = false;
         gotBack = true;
@@ -144,6 +175,6 @@ public class Person : MonoBehaviour
         //deactivate grabbable Object
     }
 
-    public GameObject getPassPort() { return passPortObject; }
-    public GameObject getVisa() {return visaObject; }
+    public GameObject GetPassPort() { return passPortObject; }
+    public GameObject GetVisa() {return visaObject; }
 }
