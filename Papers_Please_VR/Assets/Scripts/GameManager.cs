@@ -15,9 +15,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject checkLight;
     [SerializeField] private TextMeshPro ruleTableCountriesText;
     [SerializeField] private TextMeshPro ruleTableAdditionText;
+    [SerializeField] private TextMeshPro totalScoreText;
+    [SerializeField] private TextMeshPro yesterdayScoreText;
+    [SerializeField] private TextMeshPro beforeYesterdayScoreText;
 
     [SerializeField] private CheckStatus checkPassport = CheckStatus.None;
+    [SerializeField] private CheckStatus addScoreStatus = CheckStatus.None;
     [SerializeField] private bool checkRules = false;
+    [SerializeField] private bool forceNextDay = false;
 
     [SerializeField] private GameObject person;
     GameObject currentPerson;
@@ -49,10 +54,13 @@ public class GameManager : MonoBehaviour
 
     private float deltaTime = 0.0f;
 
-    private PassPortData test = new PassPortData(Countries.Germany, "Dieter", "Müller", new Vector3Int(30, 12, 2035),
+    private PassPortData test = new PassPortData(Countries.Germany, "Dieter", "Mueller", new Vector3Int(30, 12, 2035),
             new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red);
 
     private int timesRulesChanged = 0;
+    private int scoreTest = 0;
+    private List<Score> scores = new List<Score>();
+    private Score scoreToday = new Score();
 
     // Start is called before the first frame update
     void Start()
@@ -61,6 +69,10 @@ public class GameManager : MonoBehaviour
         //int ttt = 4;
         //Debug.Log(PassportCheck(test));
         //Debug.Log((Rules)ttt);
+        //scores.Add(new Score(2, 2));
+        //scores.Add(new Score(4, 8));
+        //scores.Add(new Score(10, 10));
+        ShowScore();
     }
 
     // Update is called once per frame
@@ -89,6 +101,12 @@ public class GameManager : MonoBehaviour
         {
             checkPassport = PassportCheck(test);
         }
+        if (addScoreStatus != checkPassport)
+        {
+            addScoreStatus = checkPassport;
+            AddScore(addScoreStatus);
+            Debug.Log("Correct: " + scoreToday.Correct + " Total: " + scoreToday.Total + "\n");
+        }
 
         ChangeCheckLight(checkPassport);
 
@@ -97,6 +115,63 @@ public class GameManager : MonoBehaviour
             newDay();
             checkRules = false;
         }
+        if (forceNextDay)
+        {
+            scores.Add(new Score(scoreToday.Correct, scoreToday.Total));
+            scoreToday.Reset();
+            ShowScore();
+            forceNextDay = false;
+        }
+    }
+
+    private void ShowScore()
+    {
+        // Score Yesterday
+        if (scores.Count >= 1)
+        {
+            yesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
+            + "<align=\"right\">" + scores.ElementAt(scores.Count - 1).Correct.Monospace("0.6em")
+            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
+            + scores.ElementAt(scores.Count - 1).Total.Monospace("0.6em") + "<line-height=1em>";
+        }
+        else
+        {
+            yesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
+            + "<align=\"right\">" + 0
+            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n"
+            + "<align=\"right\">" + 0 + "<line-height=1em>";
+        }
+        // Score before Yesterday
+        if (scores.Count >= 2)
+        {
+            beforeYesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
+            + "<align=\"right\">" + scores.ElementAt(scores.Count - 2).Correct.Monospace("0.6em")
+            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
+            + scores.ElementAt(scores.Count - 2).Total.Monospace("0.6em") + "<line-height=1em>";
+        } 
+        else
+        {
+            beforeYesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
+            + "<align=\"right\">" + 0
+            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" 
+            + "<align=\"right\">"+ 0 + "<line-height=1em>";
+        }
+
+        // Score Total
+        int correctTotal = 0;
+        int totalTotal = 0;
+
+        foreach (var score in scores)
+        {
+            correctTotal += score.Correct;
+            totalTotal += score.Total;
+        }
+
+        totalScoreText.text = "<align=left>Correct:<line-height=0>\n" 
+            + "<align=\"right\">" + correctTotal.Monospace("0.6em") + "<line-height=1em>\n" 
+            + "<align=left>Total:<line-height=0>\n" 
+            + "<align=\"right\">" 
+            + totalTotal.Monospace("0.6em") + "<line-height=1em>";
     }
 
     /**
@@ -173,6 +248,20 @@ public class GameManager : MonoBehaviour
         
         Debug.Log("Durschlauf: " + timesRulesChanged + " " + string.Join(", ", currentCountryDenied));
         Debug.Log("Durschlauf: " + timesRulesChanged + " " + string.Join(", ", currentPpTypesDenied));
+    }
+
+    private void AddScore(CheckStatus checkStatus)
+    {
+        switch (checkStatus)
+        {
+            case CheckStatus.Correct:
+                scoreToday.Correct++;
+                scoreToday.Total++;
+                break;
+            case CheckStatus.Wrong:
+                scoreToday.Total++;
+                break;
+        }
     }
 
     private void ChangeCheckLight(CheckStatus checkStatus)
