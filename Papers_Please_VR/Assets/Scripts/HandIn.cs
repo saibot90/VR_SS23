@@ -37,7 +37,9 @@ public class HandIn : MonoBehaviour
     {
         if (!_isActive) {
             _isActive = true;
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(4.9f);
+            GameEvents.current.TriggerVisaCheck();
+            yield return new WaitForSeconds(0.1f);
             Debug.Log("Do he be waiting");
             GameEvents.current.TriggerPassBack();
         }

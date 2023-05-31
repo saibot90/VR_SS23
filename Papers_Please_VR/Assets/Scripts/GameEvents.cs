@@ -41,6 +41,26 @@ public class GameEvents : MonoBehaviour
             onTriggerPassBack();
         }
     }
+    
+    public event Action onTriggerVisaCheck;
+
+    public void TriggerVisaCheck()
+    {
+        if(onTriggerVisaCheck != null)
+        {
+            onTriggerVisaCheck();
+        }
+    }
+    
+    public event Action<bool> onVisaStatus;
+
+    public void VisaStatus(bool status)
+    {
+        if (onVisaStatus != null)
+        {
+            onVisaStatus(status);
+        }
+    }
 
     public event Action<PassPortData> onTriggerPassCheck;
 
@@ -52,15 +72,7 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<bool> onVisaStatus;
-
-    public void VisaStatus(bool status)
-    {
-        if (onVisaStatus != null)
-        {
-            onVisaStatus(status);
-        }
-    }
+    
 
     public event Action onSpawnNewPerson;
 

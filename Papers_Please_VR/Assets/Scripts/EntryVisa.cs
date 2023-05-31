@@ -15,7 +15,7 @@ public class EntryVisa : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onTriggerPassBack += GetVisaStatus;
+        GameEvents.current.onTriggerVisaCheck += GetVisaStatus;
     }
 
     private void GetVisaStatus()
@@ -37,5 +37,10 @@ public class EntryVisa : MonoBehaviour
             approveText.color = _deniedColor;
             _status = false;
         }
+    }
+    
+    private void OnDestroy()
+    {
+        GameEvents.current.onTriggerVisaCheck -= GetVisaStatus;
     }
 }
