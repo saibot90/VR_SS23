@@ -21,4 +21,6 @@ public class Wanted : MonoBehaviour
     {
         
     }
+
+    public int GetFace() { return _mFaceCount; }
 }

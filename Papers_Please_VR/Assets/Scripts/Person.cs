@@ -23,6 +23,8 @@ public class Person : MonoBehaviour
     private GameObject _visaObject;
     private bool _gotBack = false;
 
+    private int _faceNumber;
+
     private const double Tolerance = 0.5;
     
     private Quaternion _from;
@@ -177,6 +179,8 @@ public class Person : MonoBehaviour
 
     public GameObject GetPassPort() { return _passPortObject; }
     public GameObject GetVisa() {return _visaObject; }
+    
+    public int GetFaceofPerson() {return _faceNumber; }
 
     private void OnDestroy()
     {

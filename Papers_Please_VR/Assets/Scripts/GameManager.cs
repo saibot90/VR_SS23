@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onSpawnNewPerson += spawnPerson;
+        GameEvents.current.onSpawnNewPerson += SpawnPerson;
         //int ttt = 4;
         //Debug.Log(PassportCheck(test));
         //Debug.Log((Rules)ttt);
@@ -340,7 +340,7 @@ public class GameManager : MonoBehaviour
         return CheckStatus.Correct;
     }
 
-    void spawnPerson()
+    void SpawnPerson()
     {
         Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
         _currentPerson = Instantiate(person, start, Quaternion.Euler(0,180,0));
@@ -348,7 +348,7 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameEvents.current.onSpawnNewPerson -= spawnPerson;
+        GameEvents.current.onSpawnNewPerson -= SpawnPerson;
     }
 
 }
