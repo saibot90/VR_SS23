@@ -10,7 +10,7 @@ public class EntryVisa : MonoBehaviour
     private readonly Color32 _approvedColor = new Color32(0, 185, 59, 255);
     private readonly Color32 _deniedColor = new Color32(255, 0, 0, 255);
 
-    private bool _status = false;
+    private bool _status = false; // zu CheckStatus
 
     // Start is called before the first frame update
     void Start()

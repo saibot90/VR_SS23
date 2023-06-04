@@ -16,13 +16,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro ruleTableCountriesText;
     [SerializeField] private TextMeshPro ruleTableAdditionText;
     [SerializeField] private TextMeshPro totalScoreText;
+    [SerializeField] private TextMeshPro todayScoreText;
     [SerializeField] private TextMeshPro yesterdayScoreText;
-    [SerializeField] private TextMeshPro beforeYesterdayScoreText;
 
     [SerializeField] private CheckStatus visaStatus = CheckStatus.None;
-    [SerializeField] private CheckStatus addScoreStatus = CheckStatus.None;
-    [SerializeField] private bool checkRules = false;
-    [SerializeField] private bool forceNextDay = false;
 
     [SerializeField] private GameObject person;
     GameObject _currentPerson;
@@ -60,9 +57,10 @@ public class GameManager : MonoBehaviour
     private PassPortData _currentPassportData;
 
     private int _timesRulesChanged = 0;
-    private int scoreTest = 0;
     private readonly List<Score> _scores = new List<Score>();
-    private readonly Score _scoreToday = new Score();
+    private int _correctToday = 0;
+    private int _totalToday = 0;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -82,78 +80,41 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //deltaTime += Time.deltaTime;
-        //if (deltaTime > 0.0001f)
-        //{
-        //    deltaTime = 0.0f;
-        //    nextDay();
-        //    Debug.Log(currentDay.ToString());
-        //}
         _deltaTime += Time.deltaTime;
         if (_deltaTime > 10.0f)
         {
-            //deltaTime = 0.0f;
-            //checkPassport = CheckStatus.Wrong;
-            //Debug.Log(checkPassport);
+            
         }
-        else
+        if (_totalToday > 4)
         {
-            //checkPassport = PassportCheck();
-        }
-        /*if (addScoreStatus != checkPassport)
-        {
-            addScoreStatus = checkPassport;
-            AddScore(addScoreStatus);
-            Debug.Log("Correct: " + _scoreToday.Correct + " Total: " + _scoreToday.Total + "\n");
-        }
-
-        ChangeCheckLight(checkPassport);*/
-
-        if (checkRules)
-        {
-            NewDay();
-            checkRules = false;
-        }
-        if (forceNextDay)
-        {
-            _scores.Add(new Score(_scoreToday.Correct, _scoreToday.Total));
-            _scoreToday.Reset();
-            ShowScore();
-            forceNextDay = false;
+            _scores.Add(new Score(_correctToday, _totalToday));
+            NextDay();
         }
     }
 
     private void ShowScore()
     {
+        // Score Today
+        
+            todayScoreText.text = "<align=left>Correct:<line-height=0>\n"
+                                      + "<align=\"right\">" + _correctToday.Monospace("0.6em")
+                                      + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
+                                      + _totalToday.Monospace("0.6em") + "<line-height=1em>";
+        
         // Score Yesterday
         if (_scores.Count >= 1)
         {
             yesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
-            + "<align=\"right\">" + _scores.ElementAt(_scores.Count - 1).Correct.Monospace("0.6em")
-            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
-            + _scores.ElementAt(_scores.Count - 1).Total.Monospace("0.6em") + "<line-height=1em>";
+                                      + "<align=\"right\">" + _scores.ElementAt(_scores.Count - 1).Correct.Monospace("0.6em")
+                                      + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
+                                      + _scores.ElementAt(_scores.Count - 1).Total.Monospace("0.6em") + "<line-height=1em>";
         }
         else
         {
             yesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
-            + "<align=\"right\">" + 0
-            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n"
-            + "<align=\"right\">" + 0 + "<line-height=1em>";
-        }
-        // Score before Yesterday
-        if (_scores.Count >= 2)
-        {
-            beforeYesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
-            + "<align=\"right\">" + _scores.ElementAt(_scores.Count - 2).Correct.Monospace("0.6em")
-            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" + "<align=\"right\">"
-            + _scores.ElementAt(_scores.Count - 2).Total.Monospace("0.6em") + "<line-height=1em>";
-        } 
-        else
-        {
-            beforeYesterdayScoreText.text = "<align=left>Correct:<line-height=0>\n"
-            + "<align=\"right\">" + 0
-            + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n" 
-            + "<align=\"right\">"+ 0 + "<line-height=1em>";
+                                      + "<align=\"right\">" + 0
+                                      + "<line-height=1em>\n" + "<align=left>Total:<line-height=0>\n"
+                                      + "<align=\"right\">" + 0 + "<line-height=1em>";
         }
 
         // Score Total
@@ -165,6 +126,9 @@ public class GameManager : MonoBehaviour
             correctTotal += score.Correct;
             totalTotal += score.Total;
         }
+
+        correctTotal += _correctToday;
+        totalTotal += _totalToday;
 
         totalScoreText.text = "<align=left>Correct:<line-height=0>\n" 
             + "<align=\"right\">" + correctTotal.Monospace("0.6em") + "<line-height=1em>\n" 
@@ -189,9 +153,13 @@ public class GameManager : MonoBehaviour
             _currentDay[1] = 1;
             _currentDay[2]++;
         }
+
+        _correctToday = 0;
+        _totalToday = 0;
+        AddNewRules();
     }
 
-    private void NewDay()
+    private void AddNewRules()
     {
         _timesRulesChanged++;
         // delete rules
@@ -254,11 +222,11 @@ public class GameManager : MonoBehaviour
         switch (checkStatus)
         {
             case CheckStatus.Correct:
-                _scoreToday.Correct++;
-                _scoreToday.Total++;
+                _correctToday++;
+                _totalToday++;
                 break;
             case CheckStatus.Wrong:
-                _scoreToday.Total++;
+                _totalToday++;
                 break;
         }
     }
@@ -278,12 +246,10 @@ public class GameManager : MonoBehaviour
     private void ChangeVisaStatus(bool status)
     {
         visaStatus = status ? CheckStatus.Correct : CheckStatus.Wrong;
-        Debug.Log("ChangeVisaStatus");
     }
 
     private void PassportCheck(PassPortData passPortData)
     {
-        Debug.Log("PassportCheck");
         CheckStatus checkStatus = CheckStatus.Correct;
         // Check if passportData is null
         if (passPortData == null)
@@ -345,6 +311,32 @@ public class GameManager : MonoBehaviour
             passPortData.DateOfBirth[2] == _currentDay[2] &&
             passPortData.DateOfBirth[1] == _currentDay[1] &&
             passPortData.DateOfBirth[0] > _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
+        
+        // Check if the date of birth of passport is after date of creation
+        if (checkStatus != CheckStatus.Wrong && 
+            passPortData.DateOfBirth[2] > passPortData.DateOfCreation[2]) { checkStatus =  CheckStatus.Wrong; }
+
+        if (checkStatus != CheckStatus.Wrong && 
+            passPortData.DateOfBirth[2] == passPortData.DateOfCreation[2] &&
+            passPortData.DateOfBirth[1] > passPortData.DateOfCreation[1]) { checkStatus =  CheckStatus.Wrong; }
+
+        if (checkStatus != CheckStatus.Wrong && 
+            passPortData.DateOfBirth[2] == passPortData.DateOfCreation[2] &&
+            passPortData.DateOfBirth[1] == passPortData.DateOfCreation[1] &&
+            passPortData.DateOfBirth[0] > passPortData.DateOfCreation[0]) { checkStatus =  CheckStatus.Wrong; }
+        
+        // Check if expiration date of passport is before date of creation
+        if (checkStatus != CheckStatus.Wrong && 
+            passPortData.ExpirationDate[2] < passPortData.DateOfCreation[2]) { checkStatus =  CheckStatus.Wrong; }
+
+        if (checkStatus != CheckStatus.Wrong && 
+            passPortData.ExpirationDate[2] == passPortData.DateOfCreation[2] &&
+            passPortData.ExpirationDate[1] < passPortData.DateOfCreation[1]) { checkStatus =  CheckStatus.Wrong; }
+
+        if (checkStatus != CheckStatus.Wrong && 
+            passPortData.ExpirationDate[2] == passPortData.DateOfCreation[2] &&
+            passPortData.ExpirationDate[1] == passPortData.DateOfCreation[1] &&
+            passPortData.ExpirationDate[0] < passPortData.DateOfCreation[0]) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if Passport has the right Color
         //if (checkStatus != CheckStatus.Wrong && 
@@ -362,14 +354,15 @@ public class GameManager : MonoBehaviour
             if (_currentPpTypesDenied.Contains(passPortData.PassType)) { checkStatus =  CheckStatus.Wrong; }
         }
         
-        Debug.Log(visaStatus);
-        Debug.Log(checkStatus);
-        Debug.Log(checkStatus == visaStatus);
+        //Debug.Log(visaStatus);
+        //.Log(checkStatus);
+        //Debug.Log(checkStatus == visaStatus);
 
         checkStatus = checkStatus == visaStatus ? CheckStatus.Correct : CheckStatus.Wrong;
         ChangeCheckLight(checkStatus);
         AddScore(checkStatus);
-        Debug.Log("Correct: " + _scoreToday.Correct + " Total: " + _scoreToday.Total + "\n");
+        ShowScore();
+        //Debug.Log("Correct: " + _correctToday + " Total: " + _totalToday + "\n");
 
         StartCoroutine(StartCountdownLightOff());
     }
@@ -378,7 +371,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         ChangeCheckLight(CheckStatus.None);
-        Debug.Log("Lights Off!");
+        //Debug.Log("Lights Off!");
     }
 
     void SpawnPerson()
