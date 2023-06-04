@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro totalScoreText;
     [SerializeField] private TextMeshPro todayScoreText;
     [SerializeField] private TextMeshPro yesterdayScoreText;
+    [SerializeField] private TextMeshPro currentDayDisplay;
 
     [SerializeField] private CheckStatus visaStatus = CheckStatus.None;
 
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
         //scores.Add(new Score(4, 8));
         //scores.Add(new Score(10, 10));
         ShowScore();
+        currentDayDisplay.text = "Today: " + _currentDay.x + "/" +  _currentDay.y + "/" + _currentDay.z;
     }
 
     // Update is called once per frame
@@ -157,6 +159,7 @@ public class GameManager : MonoBehaviour
         _correctToday = 0;
         _totalToday = 0;
         AddNewRules();
+        currentDayDisplay.text = "Today: " + _currentDay.x + "/" +  _currentDay.y + "/" + _currentDay.z; 
     }
 
     private void AddNewRules()

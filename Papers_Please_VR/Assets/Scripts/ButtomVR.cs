@@ -42,10 +42,7 @@ public class ButtomVR : MonoBehaviour
 
     public void SpawnSphere()
     {
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        sphere.transform.localPosition = new Vector3(0, 1, 2);
-        sphere.AddComponent<Rigidbody>();
+        Debug.Log("Event happend");
     }
 }
 //Change VR Hands Layer to Hands
