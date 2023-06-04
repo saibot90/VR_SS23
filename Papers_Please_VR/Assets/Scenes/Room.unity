@@ -3301,7 +3301,7 @@ MonoBehaviour:
   totalScoreText: {fileID: 1688237819}
   todayScoreText: {fileID: 1976468228}
   yesterdayScoreText: {fileID: 1396873080}
-  currentDayDisplay: {fileID: 0}
+  currentDayDisplay: {fileID: 3718377208248754276}
   visaStatus: 0
   person: {fileID: 5345262607702375345, guid: def4c577580ce8645afb8da801034572, type: 3}
   personStart: {fileID: 934352813}
@@ -6744,8 +6744,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1.5
-  m_fontSizeBase: 1.5
+  m_fontSize: 1.3
+  m_fontSizeBase: 1.3
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
