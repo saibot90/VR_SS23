@@ -47,7 +47,7 @@ public class HandIn : MonoBehaviour
     {
         if (!_isActive) {
             _isActive = true;
-            yield return new WaitForSeconds(4.9f);
+            yield return new WaitForSeconds(4.9f);//TODO 3 Sekunden besser?
             GameEvents.current.TriggerVisaCheck();
             yield return new WaitForSeconds(0.1f);
             GameEvents.current.TriggerPassBack();

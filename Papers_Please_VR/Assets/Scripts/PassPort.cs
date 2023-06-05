@@ -131,7 +131,7 @@ public class PassPort : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cannot Read PlanetList");
+            Debug.Log("Cannot Read");
         }
 
         m_TextMeshPro.text = "Type " + passType.ToString() + "<br><br>";
