@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
         {
             
         }
-        if (_totalToday > 1)
+        if (_totalToday > 4)
         {
             _scores.Add(new Score(_correctToday, _totalToday));
             NextDay();
