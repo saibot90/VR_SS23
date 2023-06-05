@@ -9,9 +9,20 @@ Dieses Spiel basiert auf dem Spiel [Paper`s Please](https://store.steampowered.c
 Aktuell beinhaltet unser Spiel folgende Punkte:
 
 - Greifen von Stempeln, Genehmigungsformular, Ausweisen
-- Man kann ein Genehmigungsformular mit Stempeln stemlpen
-- Ausweis in ein Kartenlesegerät stecken
+    - Wird an eine Position teleportiert, wenn gewisse Gebiete überschritten werden
+- Man kann ein Genehmigungsformular mit Stempeln stempeln
+    - Wird überprüft, ob man das richtige Stempelt, wenn Person geht
+    - Man bekommt eine Benachrichtigung, ob das Richtige gestempelt hat
+- Ausweis
+    - kann in ein Kartenlesegerät gesteckt werden
+    - wenn in roten Bereich gelegt, geht Person nach 5 Sekunden
+- Drücken eines Buttons der aktuell noch nichts tut...
 - Infos von Ausweisen auf einem Bildschirm ausgeben
+- Tagzyklus
+    - aktuell wird ein neuer Tag nach 5 Personen begonnen
+- Infos zu abgelehnten Ländern und Ausweistypen werden an den Wänden angezeigt
+    - Werden zu gewissen Wahrscheinlichkeiten an jedem Tag aktualisiert
+- Score wird gespeichert und ausgegeben
 
 ## Vorbedingung
 
