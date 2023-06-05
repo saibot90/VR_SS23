@@ -8,6 +8,7 @@ TagManager:
   - Form
   - Approved
   - Denied
+  - Reset
   layers:
   - Default
   - TransparentFX

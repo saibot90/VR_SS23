@@ -49,6 +49,9 @@ public class Person : MonoBehaviour
     private bool _visaObjectNotNull;
     private bool _objectNotNull;
 
+    private bool _reachedPositionPassport = false;
+    private bool _reachedPositionVisa = false;
+
     private void Start()
     {
         GameEvents.current.onTriggerPassBack += GetPassBack;
@@ -85,25 +88,28 @@ public class Person : MonoBehaviour
                 // Fraction of journey completed equals current distance divided by total distance.
                 var fractionOfJourneyPass = distCovered / _journeyLengthPass;
                 var fractionOfJourneyVisa = distCovered / _journeyLengthVisa;
-                if(_passPortObject != null && _passPortObject.GetComponentInChildren<Rigidbody>().useGravity == false) 
+                if(_passPortObject != null && _passPortObject.GetComponent<Rigidbody>().useGravity == false 
+                                           && !_reachedPositionPassport) 
                 {
                     _passPortObject.transform.position = Vector3.Lerp(_passPortStart, _passPortStop, fractionOfJourneyPass);
-
                 }
                 
-                if(_visaObject != null && _visaObject.GetComponent<Rigidbody>().useGravity == false)
+                if(_visaObject != null && _visaObject.GetComponent<Rigidbody>().useGravity == false 
+                                       && !_reachedPositionVisa)
                 {
                     _visaObject.transform.position = Vector3.Lerp(_visaStart, _visaStop, fractionOfJourneyVisa);
                 }
                 
                 if (_passPortObject != null && _passPortObject.transform.position == passPosition.position)
                 {
-                    _passPortObject.GetComponentInChildren<Rigidbody>().useGravity = true;
+                    _passPortObject.GetComponent<Rigidbody>().useGravity = true;
+                    _reachedPositionPassport = true;
                 }
 
                 if (_visaObject != null && _visaObject.transform.position == visaPosition.position)
                 {
                     _visaObject.GetComponent<Rigidbody>().useGravity = true;
+                    _reachedPositionVisa = true;
                 }
 
                 if (_passPortObject != null && (_passPortObject.transform.position == _passPortStop) && _gotBack)
@@ -141,7 +147,7 @@ public class Person : MonoBehaviour
         if(!_isActive)
         {
             _isActive = true;
-            passPort.GetComponentInChildren<Rigidbody>().useGravity = false;
+            passPort.GetComponent<Rigidbody>().useGravity = false;
             visa.GetComponent<Rigidbody>().useGravity = false;
             var transform1 = transform;
             var position1 = transform1.position;
@@ -174,6 +180,8 @@ public class Person : MonoBehaviour
         _visaObject.GetComponent<Rigidbody>().useGravity = false;
         _gotBack = true;
         _startTime = Time.time;
+        _reachedPositionPassport = false;
+        _reachedPositionVisa = false;
         //deactivate grabbable Object
     }
 

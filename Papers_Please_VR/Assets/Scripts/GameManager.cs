@@ -6,6 +6,7 @@ using TMPro;
 using static PassPortData;
 using System.Collections;
 using Random = UnityEngine.Random;
+using CheckStatus = Unity.Template.VR.CheckStatus;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,13 +34,6 @@ public class GameManager : MonoBehaviour
         Land        = 0b_0000_0001,
         PassType    = 0b_0000_0010,
         MultiDocs   = 0b_0000_0100
-    }
-
-    private enum CheckStatus
-    {
-        None = 0,
-        Correct = 1,
-        Wrong = 2
     }
 
     private Vector3Int _currentDay = new Vector3Int(1, 1, 2023);
