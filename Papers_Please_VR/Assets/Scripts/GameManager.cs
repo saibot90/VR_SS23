@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     private float _deltaTime = 0.0f;
 
     private PassPortData _test = new PassPortData(Countries.Germany, "Dieter", "Mueller", new Vector3Int(30, 12, 2035),
-            new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red);
+            new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red, false);
 
     private PassPortData _currentPassportData;
 
@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
         GameEvents.current.onSpawnNewPerson += SpawnPerson;
         GameEvents.current.onVisaStatus += ChangeVisaStatus;
         GameEvents.current.onTriggerPassCheck += PassportCheck;
+        GameEvents.current.onTriggerPassBack2 += WantedPerson;
         //int ttt = 4;
         //Debug.Log(PassportCheck(test));
         //Debug.Log((Rules)ttt);
@@ -240,9 +241,9 @@ public class GameManager : MonoBehaviour
         checkLight.GetComponent<MeshRenderer>().material = checklightMaterial;
     }
 
-    private void ChangeVisaStatus(bool status)
+    private void ChangeVisaStatus(CheckStatus status)
     {
-        visaStatus = status ? CheckStatus.Correct : CheckStatus.Wrong;
+        visaStatus = status;
     }
 
     private void PassportCheck(PassPortData passPortData)
@@ -369,6 +370,19 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(5);
         ChangeCheckLight(CheckStatus.None);
         //Debug.Log("Lights Off!");
+    }
+
+    void WantedPerson()
+    {
+        CheckStatus checkStatus = CheckStatus.Correct;
+        
+        
+        ChangeCheckLight(checkStatus);
+        AddScore(checkStatus);
+        ShowScore();
+        //Debug.Log("Correct: " + _correctToday + " Total: " + _totalToday + "\n");
+
+        StartCoroutine(StartCountdownLightOff());
     }
 
     void SpawnPerson()

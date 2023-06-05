@@ -41,6 +41,7 @@ public class PassPortData
     public Vector3Int DateOfBirth { get; set; }
     public PassportTypes PassType { get; set; }
     public PassportColor PassColor { get; set; }
+    public bool Wanted { get; set; }
     
     public PassPortData()
     {
@@ -52,9 +53,10 @@ public class PassPortData
         DateOfBirth = new Vector3Int(0, 0, 0);
         PassType = PassportTypes.None;
         PassColor = PassportColor.None;
+        Wanted = false;
     }
 
-    public PassPortData(Countries country, string firstName, string lastName, Vector3Int expirationDate, Vector3Int dateOfCreation, Vector3Int dateOfBirth, PassportTypes passType, PassportColor passColor)
+    public PassPortData(Countries country, string firstName, string lastName, Vector3Int expirationDate, Vector3Int dateOfCreation, Vector3Int dateOfBirth, PassportTypes passType, PassportColor passColor, bool wanted)
     {
         Country = country;
         FirstName = firstName;
@@ -64,5 +66,6 @@ public class PassPortData
         DateOfBirth = dateOfBirth;
         PassType = passType;
         PassColor = passColor;
+        Wanted = wanted;
     }
 }

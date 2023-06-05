@@ -55,6 +55,7 @@ public class Person : MonoBehaviour
     private void Start()
     {
         GameEvents.current.onTriggerPassBack += GetPassBack;
+        GameEvents.current.onTriggerPassBack2 += GetPassBack;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _passPortStop = passPosition.position;
         _visaStop = visaPosition.position;
@@ -193,5 +194,6 @@ public class Person : MonoBehaviour
     private void OnDestroy()
     {
         GameEvents.current.onTriggerPassBack -= GetPassBack;
+        GameEvents.current.onTriggerPassBack2 -= GetPassBack;
     }
 }

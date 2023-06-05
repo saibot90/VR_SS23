@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using CheckStatus = Unity.Template.VR.CheckStatus;
 
 public class EntryVisa : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class EntryVisa : MonoBehaviour
     private readonly Color32 _approvedColor = new Color32(0, 185, 59, 255);
     private readonly Color32 _deniedColor = new Color32(255, 0, 0, 255);
 
-    private bool _status = false; // zu CheckStatus
+    private CheckStatus _status = CheckStatus.None; // zu CheckStatus
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +30,13 @@ public class EntryVisa : MonoBehaviour
         {
             approveText.text = "Approved";
             approveText.color = _approvedColor;
-            _status = true;
+            _status = CheckStatus.Correct;
         }
         if (other.gameObject.CompareTag(deniedTag))
         {
             approveText.text = "Denied";
             approveText.color = _deniedColor;
-            _status = false;
+            _status = CheckStatus.Wrong;
         }
     }
     

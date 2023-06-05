@@ -65,6 +65,8 @@ public class PassPort : MonoBehaviour
     Vector3Int dateOfBirth;
     PassPortData.PassportTypes passType;
     PassPortData.PassportColor passColor;
+
+    private bool wanted = false;
     //DateTime date = new DateTime(2000, 13, 1);
     #endregion
 
@@ -82,15 +84,28 @@ public class PassPort : MonoBehaviour
         GameEvents.current.onTriggerInfo += ReaderHit;
         GameEvents.current.onTriggerPassBack += getPassInfo;
         m_Faces = Resources.Load("Faces/face1") as Material;
-
-        //passAge = Random.Range(5, 92);
-        expirationDate = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(2015, 2035));
-        dateOfcreation = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(2015, 2035));
-        dateOfBirth = new Vector3Int(Random.Range(1, 30), Random.Range(1, 12), Random.Range(1920, 2035));
-        country = (PassPortData.Countries) Random.Range(1, 3); //Anpassen wenn Laenderliste erweitert wird
-        passType = (PassPortData.PassportTypes)Random.Range(1, 5);
-        passColor = (PassPortData.PassportColor)Random.Range(1, 5);
-
+        int correctPass = Random.Range(1, 100);
+        
+        switch (correctPass)
+        {
+            case <85:
+                expirationDate = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2024, 2040));
+                dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
+                dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
+                country = (PassPortData.Countries) Random.Range(1, 3); //Anpassen wenn Laenderliste erweitert wird
+                passType = (PassPortData.PassportTypes)Random.Range(1, 5);
+                passColor = (PassPortData.PassportColor)Random.Range(1, 5);
+                break;
+            case >=85:
+                expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
+                dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
+                dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
+                country = (PassPortData.Countries) Random.Range(1, 3); //Anpassen wenn Laenderliste erweitert wird
+                passType = (PassPortData.PassportTypes)Random.Range(1, 5);
+                passColor = (PassPortData.PassportColor)Random.Range(1, 5);
+                break;
+            default: break;
+        }
 
         //Debug.Log(m_Faces.Length);
         m_Picture.GetComponent<Renderer>().material = m_Faces; 
@@ -134,7 +149,7 @@ public class PassPort : MonoBehaviour
 
     void getPassInfo()
     {
-        GameEvents.current.TriggerPassCheck(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor));
+        GameEvents.current.TriggerPassCheck(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted));
     }
 
     // Update is called once per frame

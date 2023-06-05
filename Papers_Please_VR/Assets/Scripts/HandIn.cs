@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Template.VR;
 using UnityEngine;
 
 public class HandIn : MonoBehaviour
@@ -10,14 +11,14 @@ public class HandIn : MonoBehaviour
     void Start()
     {
         GameEvents.current.onSpawnNewPerson += ResetHandIn;
-        
+        GameEvents.current.onVisaStatus += VisaNotReady;
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("PassPort")) //Pass und Visa muessen in Trigger liegen
         {
-            Debug.Log("Entered Box");
             _co = StartCoroutine(StartCountdownForHandIn());
         }
         
@@ -27,9 +28,18 @@ public class HandIn : MonoBehaviour
     {
         if (other.CompareTag("PassPort"))
         {
-            Debug.Log("Left Box");
             StopCoroutine(_co);
             _isActive = false;
+        }
+    }
+
+    void VisaNotReady(CheckStatus ready)
+    {
+        if (ready == CheckStatus.None)
+        {
+            StopCoroutine(_co);
+            _isActive = false; 
+            //HandInBox color change? To indicate something is wrong?
         }
     }
 
@@ -40,7 +50,6 @@ public class HandIn : MonoBehaviour
             yield return new WaitForSeconds(4.9f);
             GameEvents.current.TriggerVisaCheck();
             yield return new WaitForSeconds(0.1f);
-            Debug.Log("Do he be waiting");
             GameEvents.current.TriggerPassBack();
         }
         

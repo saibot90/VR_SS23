@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CheckStatus = Unity.Template.VR.CheckStatus;
 
 public class GameEvents : MonoBehaviour
 {
@@ -41,6 +42,15 @@ public class GameEvents : MonoBehaviour
             onTriggerPassBack();
         }
     }
+    public event Action onTriggerPassBack2;
+
+    public void TriggerPassBack2()
+    {
+        if(onTriggerPassBack2 != null)
+        {
+            onTriggerPassBack2();
+        }
+    }
     
     public event Action onTriggerVisaCheck;
 
@@ -52,9 +62,9 @@ public class GameEvents : MonoBehaviour
         }
     }
     
-    public event Action<bool> onVisaStatus;
+    public event Action<CheckStatus> onVisaStatus;
 
-    public void VisaStatus(bool status)
+    public void VisaStatus(CheckStatus status)
     {
         if (onVisaStatus != null)
         {
