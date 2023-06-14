@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
         {
             
         }
-        if (_totalToday > 4)
+        if (_totalToday > 0)
         {
             _scores.Add(new Score(_correctToday, _totalToday));
             NextDay();
@@ -162,47 +162,63 @@ public class GameManager : MonoBehaviour
     {
         _timesRulesChanged++;
         // delete rules
-        if (Random.Range(0, 100) <= 33)
+        int test = Random.Range(1, 10);
+        Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "Random number to delete rule" + test);
+        if (test <= 4)
         {
-            int random = Random.Range(0, 100);
+            int random = Random.Range(1, 10);
+            Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "Random number to decide delete rule" + random);
             switch (random)
             {
-                case <= 60:
+                case <= 5:
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
                     Countries countryToRemove = (Countries)Random.Range(1, (int)lastCountry);
                     _currentCountryDenied.Remove(countryToRemove);
+                    if (_currentCountryDenied.Count == 0)
+                    {
+                        _currentRules |= ~ Rules.Land;
+                    }
                     Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "removed " + countryToRemove);
                     break;
-                case > 60:
+                case > 5:
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
                     PassportTypes typeToRemove = (PassportTypes)Random.Range(1, (int)lastType);
                     _currentPpTypesDenied.Remove(typeToRemove);
+                    if (_currentPpTypesDenied.Count == 0)
+                    {
+                        _currentRules |= ~ Rules.PassType;
+                    }
                     Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "removed " + typeToRemove);
                     break;
             }
         }
 
+        int test2 = Random.Range(1, 10);
+        Debug.Log("Durchlauf: " + _timesRulesChanged + " " +"Random number to add rule" + test2);
         // add rules
-        if (Random.Range(0, 100) <= 66)
+        if (test2 <= 6)
         {
-            int random = Random.Range(0, 100);
+            int random = Random.Range(1, 10);
+            Debug.Log("Durchlauf: " + _timesRulesChanged + " " +"Random number to decide add rule" + random);
             switch (random)
             {
-                case <= 60:
+                case <= 5:
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
                     Countries countryToAdd = (Countries)Random.Range(1, (int)lastCountry);
                     if (_currentCountryDenied.IndexOf(countryToAdd) == -1)
                     {
                         _currentCountryDenied.Add(countryToAdd);
+                        _currentRules |= Rules.Land;
                     }
                     Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "added " + countryToAdd);
                     break;
-                case > 60:
+                case > 5:
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
                     PassportTypes typeToAdd = (PassportTypes)Random.Range(1, (int)lastType);
                     if (_currentPpTypesDenied.IndexOf(typeToAdd) == -1)
                     {
                         _currentPpTypesDenied.Add(typeToAdd);
+                        _currentRules |= Rules.PassType;
                     }
                     Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "added " + typeToAdd);
                     break;
@@ -342,13 +358,13 @@ public class GameManager : MonoBehaviour
             //(int)passPortData.PassType != (int)passPortData.PassColor) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if country is forbidden
-        if (checkStatus != CheckStatus.Wrong && _currentRules == Rules.Land)
+        if (checkStatus != CheckStatus.Wrong && (_currentRules & Rules.Land) != 0)
         {
             if (_currentCountryDenied.Contains(passPortData.Country)) { checkStatus =  CheckStatus.Wrong; }
         }
 
         // Check if passport type is forbidden
-        if (checkStatus != CheckStatus.Wrong && _currentRules == Rules.PassType)
+        if (checkStatus != CheckStatus.Wrong && (_currentRules & Rules.PassType) != 0)
         {
             if (_currentPpTypesDenied.Contains(passPortData.PassType)) { checkStatus =  CheckStatus.Wrong; }
         }
