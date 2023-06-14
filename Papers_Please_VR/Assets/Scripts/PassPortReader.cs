@@ -6,7 +6,7 @@ public class PassPortReader : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "PassPort")
+        if(other.CompareTag("PassPort"))
         {
             GameEvents.current.TriggerInfo();
         }
@@ -15,9 +15,9 @@ public class PassPortReader : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "PassPort")
+        if(other.CompareTag("PassPort"))
         {
-            GameEvents.current.Info("Passport Info");
+            GameEvents.current.Info(new PassPortData());
         }
     }
 }

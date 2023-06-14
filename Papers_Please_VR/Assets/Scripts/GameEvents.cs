@@ -13,9 +13,9 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    public event Action<string> onInfo;
+    public event Action<PassPortData> onInfo;
 
-    public void Info(string info)
+    public void Info(PassPortData info)
     {
         if (onInfo != null)
         {

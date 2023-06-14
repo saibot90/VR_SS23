@@ -145,7 +145,7 @@ public class PassPort : MonoBehaviour
 
     void ReaderHit()
     {
-        GameEvents.current.Info(passInfo);
+        GameEvents.current.Info(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted));
     }
 
     void getPassInfo()

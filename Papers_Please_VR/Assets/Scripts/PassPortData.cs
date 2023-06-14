@@ -29,7 +29,25 @@ public class PassPortData
     {
         None,
         Germany,
+        Angola,
+        Algeria,
         Italy,
+        Canada,
+        Russia,
+        Finland,
+        Australia,
+        India,
+        Congo,
+        Brazil,
+        Mexico,
+        England,
+        USA,
+        Bolivia,
+        Japan,
+        SouthKorea,
+        Turkey,
+        China,
+        Spain,
         France
     }
 
