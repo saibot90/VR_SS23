@@ -75,6 +75,9 @@ public class PassPort : MonoBehaviour
     [SerializeField] GameObject m_Picture;
     
     Material m_Faces;
+    public static int mFaceIndex;
+    private int lastWantedFace;
+    private bool wantedUsed;
     string textDataName = "NameList2.json";//"NameList.json";
     string datapath;
     string passInfo;
@@ -83,9 +86,10 @@ public class PassPort : MonoBehaviour
     {
         GameEvents.current.onTriggerInfo += ReaderHit;
         GameEvents.current.onTriggerPassBack += getPassInfo;
-        m_Faces = Resources.Load("Faces/face1") as Material;
+        mFaceIndex = Random.Range(0,3);
+        m_Faces = Resources.Load("Faces/face" + mFaceIndex) as Material;
         int correctPass = Random.Range(1, 100);
-        
+
         switch (correctPass)
         {
             case <85:

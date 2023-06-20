@@ -43,7 +43,7 @@ public class ButtomVR : MonoBehaviour
     public void SpawnSphere()
     {
         Debug.Log("Event happend");
-        //GameEvents.current.TriggerPassBack2();
+        GameEvents.current.TriggerPassBack2();
     }
 }
 //Change VR Hands Layer to Hands

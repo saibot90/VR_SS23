@@ -7,11 +7,16 @@ public class Wanted : MonoBehaviour
 {
     Material _mFaces;
     [SerializeField] GameObject mPicture;
-    int _mFaceCount;
+    public static int MFaceCount { get; set; }
     // Start is called before the first frame update
     void Start()
     {
-        _mFaceCount = Random.Range(0, 3);
+        NewFaceForWanted();
+    }
+
+    void NewFaceForWanted()
+    {
+        MFaceCount = Random.Range(0, 3);
         _mFaces = Resources.Load("Faces/face1") as Material;
         mPicture.GetComponent<Renderer>().material = _mFaces;
     }
@@ -22,5 +27,5 @@ public class Wanted : MonoBehaviour
         
     }
 
-    public int GetFace() { return _mFaceCount; }
+    public int GetFace() { return MFaceCount; }
 }

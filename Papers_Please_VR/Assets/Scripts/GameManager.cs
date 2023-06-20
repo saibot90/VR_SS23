@@ -391,13 +391,16 @@ public class GameManager : MonoBehaviour
 
     void WantedPerson()
     {
-        CheckStatus checkStatus = CheckStatus.Correct;
-        
-        
+        CheckStatus checkStatus = CheckStatus.None;
+        int faceofpass = 0;
+        if (Wanted.MFaceCount != PassPort.mFaceIndex)
+        {
+            checkStatus = CheckStatus.Wrong;
+        }else checkStatus = CheckStatus.Correct;
+
         ChangeCheckLight(checkStatus);
         AddScore(checkStatus);
         ShowScore();
-        //Debug.Log("Correct: " + _correctToday + " Total: " + _totalToday + "\n");
 
         StartCoroutine(StartCountdownLightOff());
     }
