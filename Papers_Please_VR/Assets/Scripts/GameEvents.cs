@@ -93,4 +93,14 @@ public class GameEvents : MonoBehaviour
             onSpawnNewPerson(); 
         }
     }
+    
+    public event Action onTriggerNextDay;
+
+    public void TriggerNextDay()
+    {
+        if(onTriggerNextDay != null)
+        {
+            onTriggerNextDay();
+        }
+    }
 }

@@ -296,6 +296,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 49457095}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &76659633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7909009065682642435, guid: 40a41bb66bdf6994495e8e83cfca227b,
+    type: 3}
+  m_PrefabInstance: {fileID: 386953987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &76659639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76659633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 724889448445b2b438f52db027511ef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minuteHand: {fileID: 1447312611}
+  hourHand: {fileID: 520223144}
 --- !u!1001 &83370470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2437,6 +2457,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Clock
       objectReference: {fileID: 0}
+    - target: {fileID: 7909009064688221467, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7909009064688221467, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7909009064688221467, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7909009064688221467, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7909009064688221467, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7909009065682642434, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40a41bb66bdf6994495e8e83cfca227b, type: 3}
 --- !u!1 &391203876
@@ -3133,6 +3183,56 @@ MonoBehaviour:
     m_Reference: {fileID: 875253871413052681, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ButtonPressPoint: 0.5
+--- !u!4 &520223144 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7909009064688221467, guid: 40a41bb66bdf6994495e8e83cfca227b,
+    type: 3}
+  m_PrefabInstance: {fileID: 386953987}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &548672019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 548672020}
+  - component: {fileID: 548672021}
+  m_Layer: 0
+  m_Name: TimeKeeper
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &548672020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548672019}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 847694578}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &548672021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548672019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6f8cbb7aa0aaf345a8ef3ab6d46196a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &560440724
 GameObject:
   m_ObjectHideFlags: 0
@@ -3870,6 +3970,7 @@ Transform:
   m_Children:
   - {fileID: 1066202681}
   - {fileID: 987812558}
+  - {fileID: 548672020}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4397,6 +4498,7 @@ MonoBehaviour:
   visaStatus: 0
   person: {fileID: 5345262607702375345, guid: def4c577580ce8645afb8da801034572, type: 3}
   personStart: {fileID: 934352813}
+  tm: {fileID: 548672021}
 --- !u!1 &1067790876
 GameObject:
   m_ObjectHideFlags: 0
@@ -5927,6 +6029,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Clock (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7909009065682642434, guid: 40a41bb66bdf6994495e8e83cfca227b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40a41bb66bdf6994495e8e83cfca227b, type: 3}
 --- !u!4 &1345683904 stripped
@@ -6698,6 +6805,12 @@ Transform:
   m_Father: {fileID: 1944318646}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!4 &1447312611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7909009065045582554, guid: 40a41bb66bdf6994495e8e83cfca227b,
+    type: 3}
+  m_PrefabInstance: {fileID: 386953987}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1491606955 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4436221518390046869, guid: 7c818718e39445d44a67d9afc052f6bf,

@@ -55,6 +55,7 @@ public class GameManager : MonoBehaviour
     private readonly List<Score> _scores = new List<Score>();
     private int _correctToday = 0;
     private int _totalToday = 0;
+    public TimeManager tm;
     
 
     // Start is called before the first frame update
@@ -77,8 +78,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _deltaTime += Time.deltaTime;
-        if (_deltaTime > 10.0f)
+        //_deltaTime += Time.deltaTime;
+        if (tm.DayEnd())
+        {
+            //tm.ResetDay();
+            GameEvents.current.TriggerNextDay();
+            //_scores.Add(new Score(_correctToday, _totalToday));
+            //NextDay();
+            //ShowScore();
+        }
+        /*if (_deltaTime > 10.0f)
         {
             
         }
@@ -87,7 +96,7 @@ public class GameManager : MonoBehaviour
             _scores.Add(new Score(_correctToday, _totalToday));
             NextDay();
             ShowScore();
-        }
+        }*/
     }
 
     private void ShowScore()
