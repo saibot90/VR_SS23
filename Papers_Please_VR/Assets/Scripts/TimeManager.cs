@@ -22,7 +22,7 @@ public class TimeManager : MonoBehaviour
         if (_currentTime <= DayDuration)
         {
             _currentTime += Time.deltaTime;
-            Debug.Log(_currentTime.ToString("N1"));
+            //Debug.Log(_currentTime.ToString("N1"));
         }
         //_currentTime = _totalTime % dayDuration;
         //Debug.Log(_currentTime.ToString("N1"));
