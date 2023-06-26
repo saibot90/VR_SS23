@@ -177,11 +177,11 @@ public class GameManager : MonoBehaviour
     {
         _timesRulesChanged++;
         // delete rules
-        int test = Random.Range(1, 10);
+        int test = Random.Range(1, 11);
         Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "Random number to delete rule" + test);
         if (test <= 4)
         {
-            int random = Random.Range(1, 10);
+            int random = Random.Range(1, 11);
             Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "Random number to decide delete rule" + random);
             switch (random)
             {
@@ -208,18 +208,18 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        int test2 = Random.Range(1, 10);
+        int test2 = Random.Range(1, 11);
         Debug.Log("Durchlauf: " + _timesRulesChanged + " " +"Random number to add rule" + test2);
         // add rules
         if (test2 <= 6)
         {
-            int random = Random.Range(1, 10);
+            int random = Random.Range(1, 11);
             Debug.Log("Durchlauf: " + _timesRulesChanged + " " +"Random number to decide add rule" + random);
             switch (random)
             {
                 case <= 5:
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
-                    Countries countryToAdd = (Countries)Random.Range(1, (int)lastCountry);
+                    Countries countryToAdd = (Countries)Random.Range(1, (int)lastCountry + 1);
                     if (_currentCountryDenied.IndexOf(countryToAdd) == -1)
                     {
                         _currentCountryDenied.Add(countryToAdd);
@@ -229,7 +229,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case > 5:
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
-                    PassportTypes typeToAdd = (PassportTypes)Random.Range(1, (int)lastType);
+                    PassportTypes typeToAdd = (PassportTypes)Random.Range(1, (int)lastType + 1);
                     if (_currentPpTypesDenied.IndexOf(typeToAdd) == -1)
                     {
                         _currentPpTypesDenied.Add(typeToAdd);
