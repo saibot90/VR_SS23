@@ -21,9 +21,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro yesterdayScoreText;
     [SerializeField] private TextMeshPro[] currentDayDisplay;
 
-    [SerializeField] private CheckStatus visaStatus = CheckStatus.None;
+    private CheckStatus _visaStatus = CheckStatus.None;
 
     [SerializeField] private GameObject person;
+    [SerializeField] private GameObject nextDayButton;
     GameObject _currentPerson;
     [SerializeField] private Transform personStart;
 
@@ -32,8 +33,7 @@ public class GameManager : MonoBehaviour
     {
         None        = 0b_0000_0000,
         Land        = 0b_0000_0001,
-        PassType    = 0b_0000_0010,
-        MultiDocs   = 0b_0000_0100
+        PassType    = 0b_0000_0010
     }
 
     private Vector3Int _currentDay = new Vector3Int(1, 1, 2023);
@@ -43,8 +43,6 @@ public class GameManager : MonoBehaviour
     private readonly List<Countries> _currentCountryDenied = new List<Countries>();
 
     private readonly List<PassportTypes> _currentPpTypesDenied = new List<PassportTypes>();
-
-    private float _deltaTime = 0.0f;
 
     private PassPortData _test = new PassPortData(Countries.Germany, "Dieter", "Mueller", new Vector3Int(30, 12, 2035),
             new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red, false);
@@ -65,12 +63,6 @@ public class GameManager : MonoBehaviour
         GameEvents.current.onVisaStatus += ChangeVisaStatus;
         GameEvents.current.onTriggerPassCheck += PassportCheck;
         GameEvents.current.onTriggerPassBack2 += WantedPerson;
-        //int ttt = 4;
-        //Debug.Log(PassportCheck(test));
-        //Debug.Log((Rules)ttt);
-        //scores.Add(new Score(2, 2));
-        //scores.Add(new Score(4, 8));
-        //scores.Add(new Score(10, 10));
         ShowScore();
         foreach (var oneDisplay in currentDayDisplay)
         {
@@ -81,25 +73,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //_deltaTime += Time.deltaTime;
         if (tm.DayEnd())
         {
+            nextDayButton.SetActive(true);
             //tm.ResetDay();
-            GameEvents.current.TriggerNextDay();
-            _scores.Add(new Score(_correctToday, _totalToday));
-            NextDay();
-            ShowScore();
+            //GameEvents.current.TriggerNextDay();
+            //_scores.Add(new Score(_correctToday, _totalToday));
+            //NextDay();
+            //ShowScore();
         }
-        /*if (_deltaTime > 10.0f)
-        {
-            
-        }
-        if (_totalToday > 0)
-        {
-            _scores.Add(new Score(_correctToday, _totalToday));
-            NextDay();
-            ShowScore();
-        }*/
     }
 
     private void ShowScore()
@@ -150,8 +132,11 @@ public class GameManager : MonoBehaviour
     /**
      * Sets the day to the next one
      */
-    private void NextDay()
+    public void NextDay()
     {
+        nextDayButton.SetActive(false);
+        GameEvents.current.TriggerNextDay();
+        _scores.Add(new Score(_correctToday, _totalToday));
         _currentDay[0]++;
         if (_currentDay[0] > 30)
         {
@@ -171,6 +156,7 @@ public class GameManager : MonoBehaviour
         {
             oneDisplay.text = "Today: " + _currentDay.x + "/" +  _currentDay.y + "/" + _currentDay.z;
         }
+        ShowScore();
     }
 
     private void AddNewRules()
@@ -263,19 +249,19 @@ public class GameManager : MonoBehaviour
 
     private void ChangeCheckLight(CheckStatus checkStatus)
     {
-        Material checklightMaterial = checkStatus switch
+        Material checkLightMaterial = checkStatus switch
         {
             CheckStatus.None => glowNone,
             CheckStatus.Correct => glowCorrect,
             CheckStatus.Wrong => glowWrong,
             _ => throw new ArgumentOutOfRangeException(nameof(checkStatus), checkStatus, null)
         };
-        checkLight.GetComponent<MeshRenderer>().material = checklightMaterial;
+        checkLight.GetComponent<MeshRenderer>().material = checkLightMaterial;
     }
 
     private void ChangeVisaStatus(CheckStatus status)
     {
-        visaStatus = status;
+        _visaStatus = status;
     }
 
     private void PassportCheck(PassPortData passPortData)
@@ -383,31 +369,25 @@ public class GameManager : MonoBehaviour
         {
             if (_currentPpTypesDenied.Contains(passPortData.PassType)) { checkStatus =  CheckStatus.Wrong; }
         }
-        
-        //Debug.Log(visaStatus);
-        //.Log(checkStatus);
-        //Debug.Log(checkStatus == visaStatus);
 
-        checkStatus = checkStatus == visaStatus ? CheckStatus.Correct : CheckStatus.Wrong;
+        checkStatus = checkStatus == _visaStatus ? CheckStatus.Correct : CheckStatus.Wrong;
         ChangeCheckLight(checkStatus);
         AddScore(checkStatus);
         ShowScore();
-        //Debug.Log("Correct: " + _correctToday + " Total: " + _totalToday + "\n");
 
         StartCoroutine(StartCountdownLightOff());
     }
 
     private IEnumerator StartCountdownLightOff()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3);
         ChangeCheckLight(CheckStatus.None);
-        //Debug.Log("Lights Off!");
     }
 
     void WantedPerson()
     {
         CheckStatus checkStatus = CheckStatus.None;
-        int faceofpass = 0;
+        //int faceofpass = 0; //TODO
         if (Wanted.MFaceCount != PassPort.mFaceIndex)
         {
             checkStatus = CheckStatus.Wrong;
