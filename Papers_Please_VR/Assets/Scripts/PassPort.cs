@@ -31,28 +31,6 @@ public class LastNames
 {
     public LastName[] lastNameList;
 }
-
-[System.Serializable]
-public class Country
-{
-    public string name;
-}
-
-public class Countrys
-{
-    public Country[] countryList;
-}
-
-[System.Serializable]
-public class PassTyp
-{
-    public string name;
-}
-
-public class PassTypes
-{
-    public PassTyp[] passTypList;
-}
 #endregion
 
 public class PassPort : MonoBehaviour
@@ -75,6 +53,7 @@ public class PassPort : MonoBehaviour
     [SerializeField] TextMeshPro m_TextMeshPro;
     [SerializeField] TextMeshPro backSideText;
     [SerializeField] GameObject m_Picture;
+    [SerializeField] private GameObject m_BackSide;
     
     Material m_Faces;
     public static int mFaceIndex;
@@ -100,8 +79,9 @@ public class PassPort : MonoBehaviour
                 dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
                 dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
                 country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
-                passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
-                passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
+                int temp = Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
+                passType = (PassPortData.PassportTypes)temp;
+                passColor = (PassPortData.PassportColor)temp; //Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1)
                 break;
             case >=85:
                 expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
@@ -117,19 +97,38 @@ public class PassPort : MonoBehaviour
         m_Picture.GetComponent<Renderer>().material = m_Faces; 
         datapath = Application.dataPath + "/Resources/" + textDataName;
 
+        var backSideRenderer = m_BackSide.GetComponent<Renderer>();
+        switch (passColor)
+        {
+                case PassPortData.PassportColor.Red:
+                    backSideRenderer.material.SetColor("_Color", new Color(0.5660378f,0.01868994f,0.01868994f,1));
+                    break;
+                case PassPortData.PassportColor.Brown:
+                    backSideRenderer.material.SetColor("_Color", new Color(0.3301887f,0.158204f,0,1));
+                    break;
+                case PassPortData.PassportColor.Green:
+                    backSideRenderer.material.SetColor("_Color", new Color(0,0.245283f,0.02102427f,1));
+                    break;
+                case PassPortData.PassportColor.LightRed:
+                    backSideRenderer.material.SetColor("_Color", new Color(0.8679245f,0,0,1));
+                    break;
+                case PassPortData.PassportColor.Blue:
+                    backSideRenderer.material.SetColor("_Color", new Color(0,0.05400867f,0.4716981f,1));
+                    break;
+                default: backSideRenderer.material.SetColor("_Color", new Color(0.5660378f,0.01868994f,0.01868994f,1));
+                    break;    
+            
+        }
+
         Names names;
         LastNames lastNames;
-        Countrys countrys;
-        PassTypes passTypes;
 
         if (File.Exists(datapath))
         {
             string fileContents = File.ReadAllText(datapath);
             names = JsonUtility.FromJson<Names>(fileContents);
             lastNames = JsonUtility.FromJson<LastNames>(fileContents);
-            countrys = JsonUtility.FromJson<Countrys>(fileContents);
-            passTypes = JsonUtility.FromJson<PassTypes>(fileContents);
-
+            
             int rand = Random.Range(0, names.nameList.Length - 1);
             passName = names.nameList[rand].name;
             rand = Random.Range(0, lastNames.lastNameList.Length - 1);

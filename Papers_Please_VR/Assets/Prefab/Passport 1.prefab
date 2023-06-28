@@ -119,6 +119,7 @@ MonoBehaviour:
   m_TextMeshPro: {fileID: 2766373085098609539}
   backSideText: {fileID: 2766373083152746823}
   m_Picture: {fileID: 2766373083220126600}
+  m_BackSide: {fileID: 2766373083818297069}
 --- !u!1 &2766373083152746825
 GameObject:
   m_ObjectHideFlags: 0
