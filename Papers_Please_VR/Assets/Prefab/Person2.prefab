@@ -376,6 +376,7 @@ MonoBehaviour:
     type: 3}
   visa: {fileID: 4965695173330246703, guid: c9f6997daa19dca4db6667388d0e555b, type: 3}
   speed: 1
+  m_Picture: {fileID: 1587923205220424077}
 --- !u!1 &7793589492714945751
 GameObject:
   m_ObjectHideFlags: 0

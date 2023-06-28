@@ -51,6 +51,10 @@ public class Person : MonoBehaviour
 
     private bool _reachedPositionPassport = false;
     private bool _reachedPositionVisa = false;
+    
+    [SerializeField] GameObject m_Picture;
+    Material m_Faces;
+    public static int mFaceIndex;
 
     private void Start()
     {
@@ -61,6 +65,11 @@ public class Person : MonoBehaviour
         _visaStop = visaPosition.position;
         _from = transform.rotation;
         _to = Quaternion.Euler(0,90,0);
+        
+        mFaceIndex = UnityEngine.Random.Range(1,11);
+        string facePath = "Faces/face" + mFaceIndex;
+        m_Faces = Resources.Load(facePath) as Material;
+        m_Picture.GetComponent<Renderer>().material = m_Faces;
     }
 
     private void Update()

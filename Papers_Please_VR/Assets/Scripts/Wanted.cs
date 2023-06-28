@@ -16,8 +16,8 @@ public class Wanted : MonoBehaviour
 
     void NewFaceForWanted()
     {
-        MFaceCount = Random.Range(0, 3);
-        _mFaces = Resources.Load("Faces/face1") as Material;
+        MFaceCount = Random.Range(1, 11);
+        _mFaces = Resources.Load("Faces/face" + MFaceCount) as Material;
         mPicture.GetComponent<Renderer>().material = _mFaces;
     }
 

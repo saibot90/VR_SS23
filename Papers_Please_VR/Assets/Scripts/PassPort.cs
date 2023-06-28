@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using Random = UnityEngine.Random;
 //using System;
 
@@ -86,8 +88,9 @@ public class PassPort : MonoBehaviour
     {
         GameEvents.current.onTriggerInfo += ReaderHit;
         GameEvents.current.onTriggerPassBack += getPassInfo;
-        mFaceIndex = Random.Range(0,3);
-        m_Faces = Resources.Load("Faces/face" + mFaceIndex) as Material;
+        mFaceIndex = Person.mFaceIndex;
+        string facePath = "Faces/face" + mFaceIndex;
+        m_Faces = Resources.Load(facePath) as Material;
         int correctPass = Random.Range(1, 100);
 
         switch (correctPass)
@@ -96,17 +99,17 @@ public class PassPort : MonoBehaviour
                 expirationDate = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2024, 2040));
                 dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
                 dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
-                country = (PassPortData.Countries) Random.Range(1, 3); //Anpassen wenn Laenderliste erweitert wird
-                passType = (PassPortData.PassportTypes)Random.Range(1, 5);
-                passColor = (PassPortData.PassportColor)Random.Range(1, 5);
+                country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
+                passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
+                passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
                 break;
             case >=85:
                 expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
                 dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
                 dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
-                country = (PassPortData.Countries) Random.Range(1, 3); //Anpassen wenn Laenderliste erweitert wird
-                passType = (PassPortData.PassportTypes)Random.Range(1, 5);
-                passColor = (PassPortData.PassportColor)Random.Range(1, 5);
+                country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
+                passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
+                passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
                 break;
             default: break;
         }
@@ -160,7 +163,7 @@ public class PassPort : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+ 
     }
 
     private void OnDestroy()

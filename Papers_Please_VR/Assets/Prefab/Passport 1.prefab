@@ -842,7 +842,7 @@ GameObject:
   - component: {fileID: 118239033604291377}
   - component: {fileID: 1978752623910314685}
   - component: {fileID: 3370105844374646478}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Passport 1
   m_TagString: Reset
   m_Icon: {fileID: 0}
