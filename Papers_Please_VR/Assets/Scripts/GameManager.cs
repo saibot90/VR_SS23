@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
     {
         if (tm.DayEnd())
         {
-            nextDayButton.SetActive(true);
+            //nextDayButton.SetActive(true);
             //tm.ResetDay();
             //GameEvents.current.TriggerNextDay();
             //_scores.Add(new Score(_correctToday, _totalToday));
@@ -407,6 +407,10 @@ public class GameManager : MonoBehaviour
         {
             Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
             _currentPerson = Instantiate(person, start, Quaternion.Euler(0,180,0));  
+        }
+        else
+        {
+            nextDayButton.SetActive(true);
         }  
     }
 
