@@ -9647,6 +9647,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Person2
       objectReference: {fileID: 0}
+    - target: {fileID: 5345262607702375345, guid: def4c577580ce8645afb8da801034572,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6298799927851761755, guid: def4c577580ce8645afb8da801034572,
         type: 3}
       propertyPath: m_Speed
