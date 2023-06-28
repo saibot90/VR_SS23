@@ -10,7 +10,7 @@ public class PhysicsHandIn : MonoBehaviour
 
     private Coroutine _co;
 
-    private bool started = false;
+    private bool started = false; // TODO delete
     // Start is called before the first frame update
     void Start()
     {

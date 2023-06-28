@@ -111,7 +111,6 @@ public class PassPort : MonoBehaviour
                 passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
                 passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
                 break;
-            default: break;
         }
 
         //Debug.Log(m_Faces.Length);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CheckGrab : MonoBehaviour
 {
-    [SerializeField] private string tag;
+    [SerializeField] private new string tag;
 
     // Update is called once per frame
     void Update()

@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
 
     private const float DayDuration = 120f; // in seconds
 
-    private float _currentTime = 0;
+    private float _currentTime = 121;
 
     private void Start()
     {
@@ -41,7 +41,6 @@ public class TimeManager : MonoBehaviour
     public void ResetDay()
     {
         _currentTime = 0;
-        Debug.Log("Test");
     }
 
     public bool DayEnd()
