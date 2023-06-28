@@ -62,6 +62,7 @@ public class PassPort : MonoBehaviour
     string textDataName = "NameList2.json";//"NameList.json";
     string datapath;
     string passInfo;
+    private static readonly int Color1 = Shader.PropertyToID("_Color");
 
     void Start()
     {
@@ -71,6 +72,7 @@ public class PassPort : MonoBehaviour
         string facePath = "Faces/face" + mFaceIndex;
         m_Faces = Resources.Load(facePath) as Material;
         int correctPass = Random.Range(1, 100);
+        
 
         switch (correctPass)
         {
@@ -98,28 +100,28 @@ public class PassPort : MonoBehaviour
         datapath = Application.dataPath + "/Resources/" + textDataName;
 
         var backSideRenderer = m_BackSide.GetComponent<Renderer>();
+
         switch (passColor)
         {
                 case PassPortData.PassportColor.Red:
-                    backSideRenderer.material.SetColor("_Color", new Color(0.5660378f,0.01868994f,0.01868994f,1));
+                    backSideRenderer.material.color = new Color(0.5660378f,0.01868994f,0.01868994f,1);
                     break;
                 case PassPortData.PassportColor.Brown:
-                    backSideRenderer.material.SetColor("_Color", new Color(0.3301887f,0.158204f,0,1));
+                    backSideRenderer.material.color = new Color(0.3301887f,0.158204f,0,1);
                     break;
                 case PassPortData.PassportColor.Green:
-                    backSideRenderer.material.SetColor("_Color", new Color(0,0.245283f,0.02102427f,1));
+                    backSideRenderer.material.color = new Color(0,0.245283f,0.02102427f,1);
                     break;
                 case PassPortData.PassportColor.LightRed:
-                    backSideRenderer.material.SetColor("_Color", new Color(0.8679245f,0,0,1));
+                    backSideRenderer.material.color = new Color(0.8679245f,0,0,1);
                     break;
                 case PassPortData.PassportColor.Blue:
-                    backSideRenderer.material.SetColor("_Color", new Color(0,0.05400867f,0.4716981f,1));
+                    backSideRenderer.material.color = new Color(0,0.05400867f,0.4716981f,1);
                     break;
-                default: backSideRenderer.material.SetColor("_Color", new Color(0.5660378f,0.01868994f,0.01868994f,1));
-                    break;    
-            
+                default: backSideRenderer.material.color =  new Color(0.5660378f,0.01868994f,0.01868994f,1);
+                    break;
         }
-
+        
         Names names;
         LastNames lastNames;
 
