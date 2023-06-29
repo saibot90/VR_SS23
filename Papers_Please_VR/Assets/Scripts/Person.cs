@@ -195,6 +195,11 @@ public class Person : MonoBehaviour
         //deactivate grabbable Object
     }
 
+    public bool PersonPresent()
+    {
+        return _index == (movePositionTransform.Length - 2);
+    }
+
     public GameObject GetPassPort() { return _passPortObject; }
     public GameObject GetVisa() {return _visaObject; }
     

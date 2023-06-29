@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
     {
         nextDayButton.SetActive(false);
         GameEvents.current.TriggerNextDay();
-        SpawnPerson();
+        GameEvents.current.SpawnNewPerson();//SpawnPerson();
         _scores.Add(new Score(_correctToday, _totalToday));
         _currentDay[0]++;
         if (_currentDay[0] > 30)
@@ -413,6 +413,8 @@ public class GameManager : MonoBehaviour
             nextDayButton.SetActive(true);
         }  
     }
+    
+    
 
     private void OnDestroy()
     {

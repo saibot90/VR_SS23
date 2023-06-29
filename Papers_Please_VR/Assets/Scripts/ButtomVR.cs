@@ -10,11 +10,18 @@ public class ButtomVR : MonoBehaviour
     public UnityEvent onRelease;
     private GameObject _presser;
     private bool _isPressed;
+    private Person _person;
     
     // Start is called before the first frame update
     void Start()
     {
         _isPressed = false;
+        GameEvents.current.onSpawnNewPerson += FindPerson;
+    }
+
+    private void FindPerson()
+    {
+        _person = GameObject.FindObjectOfType<Person>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -25,7 +32,6 @@ public class ButtomVR : MonoBehaviour
             _presser = other.gameObject;
             onPress.Invoke();
             _isPressed = true;
-            Debug.Log("Pressed");
         }
     }
 
@@ -36,14 +42,15 @@ public class ButtomVR : MonoBehaviour
             button.transform.localPosition = new Vector3(0, 0.015f, 0);
             onRelease.Invoke();
             _isPressed = false;
-            Debug.Log("Depressed");
         }
     }
 
-    public void SpawnSphere()
+    public void SpawnSphere()//ToDo: rename
     {
-        Debug.Log("Event happend");
-        GameEvents.current.TriggerPassBack2();
+        if (_person.PersonPresent())
+        {
+            GameEvents.current.TriggerPassBack2();
+        }  
     }
 }
 //Change VR Hands Layer to Hands
