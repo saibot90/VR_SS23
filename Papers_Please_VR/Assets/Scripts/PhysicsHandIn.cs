@@ -34,8 +34,10 @@ public class PhysicsHandIn : MonoBehaviour
         
         if (hitColliders.Length == 2 )
         {
+            Debug.Log("2 inside");
             if (!_isActive)
             {
+                Debug.Log("started countdown");
                 _co = StartCoroutine(StartCountdownForHandIn());
             }
         }
@@ -43,6 +45,7 @@ public class PhysicsHandIn : MonoBehaviour
         {
             if (_co != null) 
             {
+                Debug.Log("stoped because not 2 inside");
                 StopCoroutine(_co);
                 _isActive = false;
             }
@@ -54,6 +57,7 @@ public class PhysicsHandIn : MonoBehaviour
     {
         if (ready == CheckStatus.None && _co != null)
         {
+            Debug.Log("stoped because visa not ready");
             StopCoroutine(_co);
             _isActive = false;
             //HandInBox color change? To indicate something is wrong?
