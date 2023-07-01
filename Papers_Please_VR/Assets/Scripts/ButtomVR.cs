@@ -11,6 +11,7 @@ public class ButtomVR : MonoBehaviour
     private GameObject _presser;
     private bool _isPressed;
     private Person _person;
+    private bool _pressedOnce = false;
     
     // Start is called before the first frame update
     private void Start()
@@ -45,12 +46,15 @@ public class ButtomVR : MonoBehaviour
         }
     }
 
-    public void WantedPressed()//ToDo: rename
+    public void WantedPressed()
     {
         if (_person.PersonPresent())
         {
+            if (_pressedOnce) return;
             GameEvents.current.TriggerPassBack2();
-        }  
+            _pressedOnce = true;
+        }
+        else _pressedOnce = false;
     }
 }
 //Change VR Hands Layer to Hands
