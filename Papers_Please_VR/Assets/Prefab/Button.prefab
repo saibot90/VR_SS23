@@ -264,7 +264,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4357550800585422184}
         m_TargetAssemblyTypeName: ButtomVR, Assembly-CSharp
-        m_MethodName: SpawnSphere
+        m_MethodName: WantedPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

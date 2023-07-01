@@ -402,7 +402,6 @@ GameObject:
   - component: {fileID: 7909009065682642463}
   - component: {fileID: 7909009065682642432}
   - component: {fileID: 7909009065682642433}
-  - component: {fileID: 7909009065682642434}
   m_Layer: 0
   m_Name: Clock_Object
   m_TagString: Untagged
@@ -490,17 +489,3 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &7909009065682642434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7909009065682642435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6092a34f026c8b4d81e646f05eac6a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minuteHand: {fileID: 7909009065045582554}
-  hourHand: {fileID: 7909009064688221467}

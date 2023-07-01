@@ -13,15 +13,15 @@ public class ButtomVR : MonoBehaviour
     private Person _person;
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _isPressed = false;
-        GameEvents.current.onSpawnNewPerson += FindPerson;
+        GameEvents.current.onNewPersonSpawned += FindPerson;
     }
 
-    private void FindPerson()
+    private void FindPerson(Person person)
     {
-        _person = GameObject.FindObjectOfType<Person>();
+        _person = person;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,7 +45,7 @@ public class ButtomVR : MonoBehaviour
         }
     }
 
-    public void SpawnSphere()//ToDo: rename
+    public void WantedPressed()//ToDo: rename
     {
         if (_person.PersonPresent())
         {

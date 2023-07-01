@@ -12,7 +12,7 @@ public class PhysicsHandIn : MonoBehaviour
     private Coroutine _co;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         GameEvents.current.onSpawnNewPerson += ResetHandIn;
         GameEvents.current.onVisaStatus += VisaNotReady;
@@ -20,12 +20,12 @@ public class PhysicsHandIn : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         MyCollisions();
     }
 
-    void MyCollisions()
+    private void MyCollisions()
     {
         //Use the OverlapBox to detect if there are any other colliders within this box area.
         //Use the GameObject's centre, half the size (as a radius) and rotation. This creates an invisible box around your GameObject.
@@ -49,8 +49,8 @@ public class PhysicsHandIn : MonoBehaviour
         }
         
     }
-    
-    void VisaNotReady(CheckStatus ready)
+
+    private void VisaNotReady(CheckStatus ready)
     {
         if (ready == CheckStatus.None && _co != null)
         {

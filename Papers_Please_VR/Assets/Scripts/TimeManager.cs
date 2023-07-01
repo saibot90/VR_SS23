@@ -17,15 +17,12 @@ public class TimeManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (_currentTime <= DayDuration)
         {
             _currentTime += Time.deltaTime;
-            //Debug.Log(_currentTime.ToString("N1"));
         }
-        //_currentTime = _totalTime % dayDuration;
-        //Debug.Log(_currentTime.ToString("N1"));
     }
 
     public float GetHour()
@@ -38,7 +35,7 @@ public class TimeManager : MonoBehaviour
         return (_currentTime * HoursInDay * MinutesInHour / DayDuration) % MinutesInHour;
     }
 
-    public void ResetDay()
+    private void ResetDay()
     {
         _currentTime = 0;
     }

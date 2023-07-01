@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject person;
     [SerializeField] private GameObject nextDayButton;
+    [SerializeField] private GameObject startButton;
     GameObject _currentPerson;
     [SerializeField] private Transform personStart;
 
@@ -57,31 +58,14 @@ public class GameManager : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         GameEvents.current.onSpawnNewPerson += SpawnPerson;
         GameEvents.current.onVisaStatus += ChangeVisaStatus;
         GameEvents.current.onTriggerPassCheck += PassportCheck;
         GameEvents.current.onTriggerPassBack2 += WantedPerson;
+        DisplayDay();
         ShowScore();
-        foreach (var oneDisplay in currentDayDisplay)
-        {
-            oneDisplay.text = "Today: " + _currentDay.x + "/" +  _currentDay.y + "/" + _currentDay.z;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (tm.DayEnd())
-        {
-            //nextDayButton.SetActive(true);
-            //tm.ResetDay();
-            //GameEvents.current.TriggerNextDay();
-            //_scores.Add(new Score(_correctToday, _totalToday));
-            //NextDay();
-            //ShowScore();
-        }
     }
 
     private void ShowScore()
@@ -129,6 +113,25 @@ public class GameManager : MonoBehaviour
             + totalTotal.Monospace("0.6em") + "<line-height=1em>";
     }
 
+    public void StartGame()
+    {
+        startButton.SetActive(false);
+        GameEvents.current.TriggerNextDay();
+        GameEvents.current.SpawnNewPerson();//SpawnPerson();
+        _correctToday = 0;
+        _totalToday = 0;
+        DisplayDay();
+        ShowScore();
+    }
+
+    private void DisplayDay()
+    {
+        foreach (var oneDisplay in currentDayDisplay)
+        {
+            oneDisplay.text = "Today: " + _currentDay.x + "/" +  _currentDay.y + "/" + _currentDay.z;
+        }
+    }
+
     /**
      * Sets the day to the next one
      */
@@ -153,10 +156,7 @@ public class GameManager : MonoBehaviour
         _correctToday = 0;
         _totalToday = 0;
         AddNewRules();
-        foreach (var oneDisplay in currentDayDisplay)
-        {
-            oneDisplay.text = "Today: " + _currentDay.x + "/" +  _currentDay.y + "/" + _currentDay.z;
-        }
+        DisplayDay();
         ShowScore();
     }
 
@@ -406,7 +406,8 @@ public class GameManager : MonoBehaviour
         if (!tm.DayEnd())
         {
             Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
-            _currentPerson = Instantiate(person, start, Quaternion.Euler(0,180,0));  
+            _currentPerson = Instantiate(person, start, Quaternion.Euler(0,180,0));
+            GameEvents.current.NewPersonSpawned(_currentPerson.GetComponent<Person>());
         }
         else
         {
