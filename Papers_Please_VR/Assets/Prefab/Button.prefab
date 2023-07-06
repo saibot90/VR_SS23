@@ -94,8 +94,9 @@ GameObject:
   - component: {fileID: 4357550800585422191}
   - component: {fileID: 4357550800585422187}
   - component: {fileID: 4357550800585422186}
-  - component: {fileID: 4357550800585422185}
   - component: {fileID: 4357550800585422184}
+  - component: {fileID: 4877153968718584}
+  - component: {fileID: 1288296748336858466}
   m_Layer: 7
   m_Name: Collider
   m_TagString: Untagged
@@ -147,7 +148,50 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!82 &4357550800585422185
+--- !u!114 &4357550800585422184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4357550800585422190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0da5ccb908f36e45bea642cde383bf1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 4357550801501920467}
+  onPress:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1288296748336858466}
+        m_TargetAssemblyTypeName: PlayQuickSound, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4357550800585422184}
+        m_TargetAssemblyTypeName: ButtomVR, Assembly-CSharp
+        m_MethodName: WantedPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!82 &4877153968718584
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,7 +202,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -243,7 +287,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4357550800585422184
+--- !u!114 &1288296748336858466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -252,28 +296,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4357550800585422190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0da5ccb908f36e45bea642cde383bf1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1bfaf178470933e49a149c0213e4afee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 4357550801501920467}
-  onPress:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4357550800585422184}
-        m_TargetAssemblyTypeName: ButtomVR, Assembly-CSharp
-        m_MethodName: WantedPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  sound: {fileID: 8300000, guid: 74087a8c725630e46b78974774f0f977, type: 3}
+  volume: 1
+  randomPitchVariance: 0
 --- !u!1 &4357550801501920467
 GameObject:
   m_ObjectHideFlags: 0
