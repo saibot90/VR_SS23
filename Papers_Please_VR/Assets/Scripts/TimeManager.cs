@@ -8,14 +8,20 @@ using UnityEngine;
 /// </summary>
 public class TimeManager : MonoBehaviour
 {
+    #region Variables
+    
     private const int HoursInDay = 12, MinutesInHour = 60;
 
     private const float DayDuration = 120f; // in seconds
 
     private float _currentTime = 121;
+    
+    #endregion
 
+    #region Functions
+    
     /// <summary>
-    /// Is called when the script is called for the first time
+    /// Is called before the first frame update
     ///     -subscribes game events
     /// </summary>
     private void Start()
@@ -24,7 +30,7 @@ public class TimeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Update is called once per frame
+    /// Is called once per frame
     /// - Updates the current time of the day
     /// </summary>
     private void Update()
@@ -78,4 +84,6 @@ public class TimeManager : MonoBehaviour
     {
         GameEvents.current.onTriggerNextDay -= ResetDay;
     }
+    
+    #endregion
 }

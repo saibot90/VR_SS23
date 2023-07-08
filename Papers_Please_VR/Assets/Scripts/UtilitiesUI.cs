@@ -3,31 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Nützliche funktionen für die UI
+/// Helpful functions for the UI
 /// </summary>
 public static class UtilitiesUI
 {
     /// <summary>
-    /// Sorgt dafür, dass alle Zeichen die gleiche Breite haben
+    /// Is used to make all characters the same width
     /// </summary>
-    /// <typeparam name="T">Typ vom übergebenen Objekt</typeparam>
-    /// <param name="original">Übergebenes Objekt wie z.B. String, int, float...</param>
-    /// <param name="mspace">Breite der Zeichen</param>
-    /// <param name="enabled">Optional: deaktiviert den Monospace</param>
-    /// <returns>Einen Sting in dem alle Zeichen die gleiche Breite haben</returns>
-    public static string Monospace<T>(this T original, float mspace, bool enabled = true)
-    {
-        return  enabled ? $"<mspace={mspace}px>{original}</mspace>" : original.ToString();
-    }
-
-    /// <summary>
-    /// Sorgt dafür, dass alle Zeichen die gleiche Breite haben
-    /// </summary>
-    /// <typeparam name="T">Typ vom übergebenen Objekt</typeparam>
-    /// <param name="original">Übergebenes Objekt wie z.B. String, int, float...</param>
-    /// <param name="mspace">Breite der Zeichen</param>
-    /// <param name="enabled">Optional: deaktiviert den Monospace</param>
-    /// <returns>Einen Sting in dem alle Zeichen die gleiche Breite haben</returns>
+    /// <typeparam name="T">Type of the given object</typeparam>
+    /// <param name="original">Given object like e.g. String, int, float...</param>
+    /// <param name="mspace">Width of the character, do not forget the type of mspace</param>
+    /// <param name="enabled">Optional: deactivate the monospace</param>
+    /// <returns>A Sting in which all characters have the same width</returns>
     public static string Monospace<T>(this T original, string mspace, bool enabled = true)
     {
         return enabled ? $"<mspace={mspace}>{original}</mspace>" : original.ToString();
