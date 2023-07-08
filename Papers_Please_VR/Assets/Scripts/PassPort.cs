@@ -1,15 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using System.IO;
 using System.Linq;
 using Random = UnityEngine.Random;
-//using System;
 
 #region Classes
+//used to load the names from the json text file
 [System.Serializable]
 public class Name
 {
@@ -35,7 +32,8 @@ public class LastNames
 
 public class PassPort : MonoBehaviour
 {
-    #region PassInfo
+    #region PassInfo 
+    //passport data
     PassPortData.Countries country;
     string passName;
     string passLastName;
@@ -47,32 +45,39 @@ public class PassPort : MonoBehaviour
     PassPortData.PassportColor passColor;
 
     private bool wanted = false;
-    //DateTime date = new DateTime(2000, 13, 1);
     #endregion
 
+    //different gameobjects used by the script
     [SerializeField] TextMeshPro m_TextMeshPro;
     [SerializeField] TextMeshPro backSideText;
     [SerializeField] GameObject m_Picture;
     [SerializeField] private GameObject m_BackSide;
     
+    //variables used for the picture (face)
     Material m_Faces;
     public static int mFaceIndex;
     private int lastWantedFace;
     private bool wantedUsed;
+    
+    //for loading the json text file
     string textDataName = "NameList2.json";//"NameList.json";
     string datapath;
-    string passInfo;
-    private static readonly int Color1 = Shader.PropertyToID("_Color");
 
     void Start()
     {
+        //Subscribe to events
         GameEvents.current.onTriggerInfo += ReaderHit;
         GameEvents.current.onTriggerPassBack += getPassInfo;
+        
+        //Loading the face of the person to be same on the pass
         mFaceIndex = Person.mFaceIndex;
         string facePath = "Faces/face" + mFaceIndex;
         m_Faces = Resources.Load(facePath) as Material;
-        int correctPass = Random.Range(1, 100);
+        m_Picture.GetComponent<Renderer>().material = m_Faces; 
+        datapath = Application.dataPath + "/Resources/" + textDataName;
         
+        //initiating the pass data with correct data
+        int correctPass = Random.Range(1, 100);
         expirationDate = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2024, 2040));
         dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
         dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
@@ -81,31 +86,26 @@ public class PassPort : MonoBehaviour
         passType = (PassPortData.PassportTypes)temp;
         passColor = (PassPortData.PassportColor)temp;
         
+        //overwriting pass data with incorrect data if pass is wrong
         switch (correctPass)
         {
-            // case <85:
-            //     
-            //     break;
-            // case >=85:
+            case <85:
+                break;
             case >=85 and <=87: expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
                 break;
-            case >=88 and <=90: dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
+            case <=90: dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
                 break;
-            case >=91 and <=93: dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
+            case <=93: dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
                 break;
-            case >=94 and <=96: country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
+            case <=96: country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
                 break;
-            case >=97 and <=100: passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
+            case <=100: passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
                 passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
                 break;
         }
 
-        //Debug.Log(m_Faces.Length);
-        m_Picture.GetComponent<Renderer>().material = m_Faces; 
-        datapath = Application.dataPath + "/Resources/" + textDataName;
-
+        //changing backside color to the right pass color
         var backSideRenderer = m_BackSide.GetComponent<Renderer>();
-
         switch (passColor)
         {
                 case PassPortData.PassportColor.Red:
@@ -127,9 +127,9 @@ public class PassPort : MonoBehaviour
                     break;
         }
         
+        //loading names from a json text file
         Names names;
         LastNames lastNames;
-
         if (File.Exists(datapath))
         {
             string fileContents = File.ReadAllText(datapath);
@@ -146,31 +146,32 @@ public class PassPort : MonoBehaviour
             Debug.Log("Cannot Read");
         }
 
+        //writing pass data to textfield on the pass
         m_TextMeshPro.text = "Type " + passType.ToString() + "<br><br>";
         m_TextMeshPro.text += "LastName " + passLastName + "     Name " + passName + "<br><br>";
         m_TextMeshPro.text += "Date of Birth " + dateOfBirth.x + "/" + dateOfBirth.y +"/" + dateOfBirth.z + "<br><br>";
         m_TextMeshPro.text += "Expires "+ expirationDate.x + "/" + expirationDate.y +"/" + expirationDate.z + "<br><br>";
         m_TextMeshPro.text += "Issued " + dateOfcreation.x + "/" + dateOfcreation.y +"/" + dateOfcreation.z;
-        passInfo = m_TextMeshPro.text;
         backSideText.text = country.ToString();
     }
 
+    /// <summary>
+    /// Sending the current pass data to the computer script to display it on the monitor
+    /// </summary>
     void ReaderHit()
     {
         GameEvents.current.Info(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted));
     }
 
+    /// <summary>
+    /// Sending data to game manager script to be checked 
+    /// </summary>
     void getPassInfo()
     {
         GameEvents.current.TriggerPassCheck(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
- 
-    }
-
+    //Unsubscribe from events
     private void OnDestroy()
     {
         GameEvents.current.onTriggerInfo -= ReaderHit;

@@ -10,15 +10,16 @@ public class Computer : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        //person = new Person();
         GameEvents.current.onInfo += DisplayInfo;
-        //int num = person.GetFaceofPerson();
     }
 
-    //Country country,  firstName,  lastName,  expirationDate,  dateOfCreation,  dateOfBirth, PassportTypes passType, PassportColor passColor, wanted
+    /// <summary>
+    /// If the pass is placed in the reader the display will show the information of the pass more readable
+    /// </summary>
+    /// <param name="info"> pass data passed on from passport</param>
     private void DisplayInfo(PassPortData info)
     {
-        string facePath = "Faces/face" + PassPort.mFaceIndex;
+        string facePath = "Faces/face" + PassPort.mFaceIndex; //only show if pass is in reader
         m_Faces = Resources.Load(facePath) as Material;
         m_Picture.GetComponent<Renderer>().material = m_Faces; 
         textMeshPro.text = info.PassType.ToString() + "     " + info.Country.ToString() + "<br><br>";

@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 
 public class Wanted : MonoBehaviour
 {
+    //Variables for the picture of the face
     Material _mFaces;
     [SerializeField] GameObject mPicture;
     public static int MFaceCount { get; set; }
@@ -14,17 +15,12 @@ public class Wanted : MonoBehaviour
         NewFaceForWanted();
     }
 
+    //Sets a new face for the wanted poster
     void NewFaceForWanted()
     {
         MFaceCount = Random.Range(1, 33);
         _mFaces = Resources.Load("Faces/face" + MFaceCount) as Material;
         mPicture.GetComponent<Renderer>().material = _mFaces;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public int GetFace() { return MFaceCount; }
