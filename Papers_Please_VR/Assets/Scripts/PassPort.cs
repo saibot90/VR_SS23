@@ -73,24 +73,29 @@ public class PassPort : MonoBehaviour
         m_Faces = Resources.Load(facePath) as Material;
         int correctPass = Random.Range(1, 100);
         
-
+        expirationDate = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2024, 2040));
+        dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
+        dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
+        country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
+        int temp = Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
+        passType = (PassPortData.PassportTypes)temp;
+        passColor = (PassPortData.PassportColor)temp;
+        
         switch (correctPass)
         {
-            case <85:
-                expirationDate = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2024, 2040));
-                dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
-                dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
-                country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
-                int temp = Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
-                passType = (PassPortData.PassportTypes)temp;
-                passColor = (PassPortData.PassportColor)temp; //Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1)
+            // case <85:
+            //     
+            //     break;
+            // case >=85:
+            case >=85 and <=87: expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
                 break;
-            case >=85:
-                expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
-                dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
-                dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
-                country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
-                passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
+            case >=88 and <=90: dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
+                break;
+            case >=91 and <=93: dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
+                break;
+            case >=94 and <=96: country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
+                break;
+            case >=97 and <=100: passType = (PassPortData.PassportTypes)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
                 passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
                 break;
         }

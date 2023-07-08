@@ -66,7 +66,7 @@ public class Person : MonoBehaviour
         _from = transform.rotation;
         _to = Quaternion.Euler(0,90,0);
         
-        mFaceIndex = UnityEngine.Random.Range(1,11);
+        mFaceIndex = UnityEngine.Random.Range(1,33);
         string facePath = "Faces/face" + mFaceIndex;
         m_Faces = Resources.Load(facePath) as Material;
         m_Picture.GetComponent<Renderer>().material = m_Faces;
