@@ -113,4 +113,14 @@ public class GameEvents : MonoBehaviour
             onNewPersonSpawned(person);
         }
     }
+    
+    public event Action<CheckStatus> onVisaCheckSound;
+
+    public void VisaCheckSound(CheckStatus status)
+    {
+        if (onVisaCheckSound != null)
+        {
+            onVisaCheckSound(status);
+        }
+    }
 }

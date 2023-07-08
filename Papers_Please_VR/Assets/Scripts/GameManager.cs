@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject person;
     [SerializeField] private GameObject nextDayButton;
     [SerializeField] private GameObject startButton;
-    GameObject _currentPerson;
+    private GameObject _currentPerson;
     [SerializeField] private Transform personStart;
 
     [Flags]
@@ -271,7 +271,7 @@ public class GameManager : MonoBehaviour
         // Check if passportData is null
         if (passPortData == null)
         {
-            Debug.Log("Should not have happened!");
+            print("Should not have happened!");
             return; 
         }
 
@@ -373,6 +373,7 @@ public class GameManager : MonoBehaviour
 
         checkStatus = checkStatus == _visaStatus ? CheckStatus.Correct : CheckStatus.Wrong;
         ChangeCheckLight(checkStatus);
+        GameEvents.current.VisaCheckSound(checkStatus);
         AddScore(checkStatus);
         ShowScore();
 
