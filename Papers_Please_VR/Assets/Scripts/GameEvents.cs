@@ -123,4 +123,14 @@ public class GameEvents : MonoBehaviour
             onVisaCheckSound(status);
         }
     }
+
+    public event Action onNewWantedPerson;
+
+    public void NewWantedPerson()
+    {
+        if (onNewWantedPerson != null)
+        {
+            onNewWantedPerson();
+        }
+    }
 }

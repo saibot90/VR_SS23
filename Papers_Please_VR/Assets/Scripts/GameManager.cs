@@ -457,7 +457,10 @@ public class GameManager : MonoBehaviour
     void WantedPerson()
     {
         CheckStatus checkStatus = Wanted.MFaceCount != PassPort.mFaceIndex ? CheckStatus.Wrong : CheckStatus.Correct;
-
+        if (checkStatus == CheckStatus.Correct)
+        {
+            GameEvents.current.NewWantedPerson();
+        }
         ChangeCheckLight(checkStatus);
         AddScore(checkStatus);
         ShowScore();

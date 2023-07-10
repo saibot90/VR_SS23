@@ -12,6 +12,7 @@ public class Wanted : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameEvents.current.onNewWantedPerson += NewFaceForWanted;
         NewFaceForWanted();
     }
 

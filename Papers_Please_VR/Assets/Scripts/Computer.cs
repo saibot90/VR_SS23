@@ -11,6 +11,7 @@ public class Computer : MonoBehaviour
     private void Start()
     {
         GameEvents.current.onInfo += DisplayInfo;
+        DisplayInfo(new PassPortData());
     }
 
     /// <summary>
@@ -19,7 +20,11 @@ public class Computer : MonoBehaviour
     /// <param name="info"> pass data passed on from passport</param>
     private void DisplayInfo(PassPortData info)
     {
-        string facePath = "Faces/face" + PassPort.mFaceIndex; //only show if pass is in reader
+        string facePath;
+        if (info.Country == PassPortData.Countries.None)
+        {
+            facePath = "Faces/Placeholder"; 
+        }else facePath = "Faces/face" + PassPort.mFaceIndex; 
         m_Faces = Resources.Load(facePath) as Material;
         m_Picture.GetComponent<Renderer>().material = m_Faces; 
         textMeshPro.text = info.PassType.ToString() + "     " + info.Country.ToString() + "<br><br>";
