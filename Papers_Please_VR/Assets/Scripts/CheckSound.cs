@@ -9,18 +9,18 @@ public class CheckSound : MonoBehaviour
     #region Variables
     
     [Tooltip("The sound that is played when correct")]
-    public AudioClip correctSound = null;
+    public AudioClip correctSound;
     
     [Tooltip("The sound that is played when false")]
-    public AudioClip falseSound = null;
+    public AudioClip falseSound;
 
     [Tooltip("The volume of the sound")]
     public float volume = 1.0f;
     
     [Tooltip("The range of pitch the sound is played at (-pitch, pitch)")]
-    [Range(0, 1)] public float randomPitchVariance = 0.0f;
+    [Range(0, 1)] public float randomPitchVariance;
 
-    private AudioSource _audioSource = null;
+    private AudioSource _audioSource ;
     
     private const float DefaultPitch = 1.0f;
 

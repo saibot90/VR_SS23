@@ -10,6 +10,8 @@ using CheckStatus = Unity.Template.VR.CheckStatus;
 
 public class GameManager : MonoBehaviour
 {
+    #region Variables
+    
     [SerializeField] private Material glowCorrect;
     [SerializeField] private Material glowWrong;
     [SerializeField] private Material glowNone;
@@ -20,13 +22,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro todayScoreText;
     [SerializeField] private TextMeshPro yesterdayScoreText;
     [SerializeField] private TextMeshPro[] currentDayDisplay;
-
-    private CheckStatus _visaStatus = CheckStatus.None;
-
     [SerializeField] private GameObject person;
     [SerializeField] private GameObject nextDayButton;
     [SerializeField] private GameObject startButton;
-    private GameObject _currentPerson;
     [SerializeField] private Transform personStart;
 
     [Flags]
@@ -36,6 +34,8 @@ public class GameManager : MonoBehaviour
         Land        = 0b_0000_0001,
         PassType    = 0b_0000_0010
     }
+    
+    private GameObject _currentPerson;
 
     private Vector3Int _currentDay = new Vector3Int(1, 1, 2023);
 
@@ -45,19 +45,23 @@ public class GameManager : MonoBehaviour
 
     private readonly List<PassportTypes> _currentPpTypesDenied = new List<PassportTypes>();
 
-    private PassPortData _test = new PassPortData(Countries.Germany, "Dieter", "Mueller", new Vector3Int(30, 12, 2035),
-            new Vector3Int(6, 1, 2010), new Vector3Int(12, 6, 1980), PassportTypes.P, PassportColor.Red, false);
-
     private PassPortData _currentPassportData;
-
-    private int _timesRulesChanged = 0;
-    private readonly List<Score> _scores = new List<Score>();
-    private int _correctToday = 0;
-    private int _totalToday = 0;
-    public TimeManager tm;
     
-
-    // Start is called before the first frame update
+    private readonly List<Score> _scores = new List<Score>();
+    private int _correctToday;
+    private int _totalToday;
+    public TimeManager tm;
+    private CheckStatus _visaStatus = CheckStatus.None;
+    
+    #endregion
+    
+    #region Functions
+    
+    /// <summary>
+    /// Is called before the first frame update
+    ///     - Sets game events
+    ///     - Init the scene
+    /// </summary>
     private void Start()
     {
         GameEvents.current.onSpawnNewPerson += SpawnPerson;
@@ -68,6 +72,9 @@ public class GameManager : MonoBehaviour
         ShowScore();
     }
 
+    /// <summary>
+    /// Show the score on the text fields of the scoreboard
+    /// </summary>
     private void ShowScore()
     {
         // Score Today
@@ -113,6 +120,9 @@ public class GameManager : MonoBehaviour
             + totalTotal.Monospace("0.6em") + "<line-height=1em>";
     }
 
+    /// <summary>
+    /// Set the actions that happen when the game start
+    /// </summary>
     public void StartGame()
     {
         startButton.SetActive(false);
@@ -124,6 +134,9 @@ public class GameManager : MonoBehaviour
         ShowScore();
     }
 
+    /// <summary>
+    /// Sets the time to the given text meshes
+    /// </summary>
     private void DisplayDay()
     {
         foreach (var oneDisplay in currentDayDisplay)
@@ -132,9 +145,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /**
-     * Sets the day to the next one
-     */
+    /// <summary>
+    /// Sets the day to the next one and the actions that follows whit it
+    /// </summary>
     public void NextDay()
     {
         nextDayButton.SetActive(false);
@@ -142,6 +155,7 @@ public class GameManager : MonoBehaviour
         GameEvents.current.SpawnNewPerson();//SpawnPerson();
         _scores.Add(new Score(_correctToday, _totalToday));
         _currentDay[0]++;
+        // count the day up
         if (_currentDay[0] > 30)
         {
             _currentDay[0] = 1;
@@ -153,26 +167,28 @@ public class GameManager : MonoBehaviour
             _currentDay[2]++;
         }
 
+        // Reset score
         _correctToday = 0;
         _totalToday = 0;
+        
+        // Ready the new day
         AddNewRules();
         DisplayDay();
         ShowScore();
     }
 
+    /// <summary>
+    /// Add and remove countries and passport types which are denied after this
+    /// </summary>
     private void AddNewRules()
     {
-        _timesRulesChanged++;
         // delete rules
-        int test = Random.Range(1, 11);
-        Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "Random number to delete rule" + test);
-        if (test <= 4)
+        if (Random.Range(1, 11) <= 4)
         {
-            int random = Random.Range(1, 11);
-            Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "Random number to decide delete rule" + random);
-            switch (random)
+            switch (Random.Range(1, 11))
             {
                 case <= 5:
+                    // countries
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
                     Countries countryToRemove = (Countries)Random.Range(1, (int)lastCountry);
                     _currentCountryDenied.Remove(countryToRemove);
@@ -180,9 +196,9 @@ public class GameManager : MonoBehaviour
                     {
                         _currentRules |= ~ Rules.Land;
                     }
-                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "removed " + countryToRemove);
                     break;
                 case > 5:
+                    // passport type
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
                     PassportTypes typeToRemove = (PassportTypes)Random.Range(1, (int)lastType);
                     _currentPpTypesDenied.Remove(typeToRemove);
@@ -190,21 +206,17 @@ public class GameManager : MonoBehaviour
                     {
                         _currentRules |= ~ Rules.PassType;
                     }
-                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "removed " + typeToRemove);
                     break;
             }
         }
 
-        int test2 = Random.Range(1, 11);
-        Debug.Log("Durchlauf: " + _timesRulesChanged + " " +"Random number to add rule" + test2);
         // add rules
-        if (test2 <= 6)
+        if (Random.Range(1, 11) <= 6)
         {
-            int random = Random.Range(1, 11);
-            Debug.Log("Durchlauf: " + _timesRulesChanged + " " +"Random number to decide add rule" + random);
-            switch (random)
+            switch (Random.Range(1, 11))
             {
                 case <= 5:
+                    // countries
                     Countries lastCountry = Enum.GetValues(typeof(Countries)).Cast<Countries>().Max();
                     Countries countryToAdd = (Countries)Random.Range(1, (int)lastCountry + 1);
                     if (_currentCountryDenied.IndexOf(countryToAdd) == -1)
@@ -212,9 +224,9 @@ public class GameManager : MonoBehaviour
                         _currentCountryDenied.Add(countryToAdd);
                         _currentRules |= Rules.Land;
                     }
-                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "added " + countryToAdd);
                     break;
                 case > 5:
+                    // passport type
                     PassportTypes lastType = Enum.GetValues(typeof(PassportTypes)).Cast<PassportTypes>().Max();
                     PassportTypes typeToAdd = (PassportTypes)Random.Range(1, (int)lastType + 1);
                     if (_currentPpTypesDenied.IndexOf(typeToAdd) == -1)
@@ -222,18 +234,19 @@ public class GameManager : MonoBehaviour
                         _currentPpTypesDenied.Add(typeToAdd);
                         _currentRules |= Rules.PassType;
                     }
-                    Debug.Log("Durchlauf: " + _timesRulesChanged + " " + "added " + typeToAdd);
                     break;
             }
         }
 
+        // add denied countries and passport types to the rule table to show them in game
         ruleTableCountriesText.text = string.Join("\n", _currentCountryDenied);
         ruleTableAdditionText.text = string.Join(", ", _currentPpTypesDenied);
-        
-        Debug.Log("Durchlauf: " + _timesRulesChanged + " " + string.Join(", ", _currentCountryDenied));
-        Debug.Log("Durchlauf: " + _timesRulesChanged + " " + string.Join(", ", _currentPpTypesDenied));
     }
 
+    /// <summary>
+    /// Adds the score to the daily score
+    /// </summary>
+    /// <param name="checkStatus">defines if the player was correct or not</param>
     private void AddScore(CheckStatus checkStatus)
     {
         switch (checkStatus)
@@ -248,6 +261,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
+    /// <summary>
+    /// Changes the color of the check light
+    /// </summary>
+    /// <param name="checkStatus">status to change the color</param>
+    /// <exception cref="ArgumentOutOfRangeException">In case a value is added which is not thought of</exception>
     private void ChangeCheckLight(CheckStatus checkStatus)
     {
         Material checkLightMaterial = checkStatus switch
@@ -260,117 +279,159 @@ public class GameManager : MonoBehaviour
         checkLight.GetComponent<MeshRenderer>().material = checkLightMaterial;
     }
 
+    /// <summary>
+    /// Changes the local visa status
+    /// </summary>
+    /// <param name="status">status that the local visa should have</param>
     private void ChangeVisaStatus(CheckStatus status)
     {
         _visaStatus = status;
     }
 
-    private void PassportCheck(PassPortData passPortData)
+    /// <summary>
+    /// Checks the content of the given passport data and returns the validation of it
+    /// </summary>
+    /// <param name="passportData">data to check</param>
+    /// <returns>Valid state of the data</returns>
+    private CheckStatus PassportDataCheck(PassPortData passportData)
     {
         CheckStatus checkStatus = CheckStatus.Correct;
+        
         // Check if passportData is null
-        if (passPortData == null)
+        if (passportData == null)
         {
             print("Should not have happened!");
-            return; 
+            return CheckStatus.None; 
         }
-
+        
         // Check if dates are valid
-        if (passPortData.ExpirationDate[0] < 1 || passPortData.ExpirationDate[0] > 30) { checkStatus =  CheckStatus.Wrong; }
+        if (passportData.ExpirationDate[0] < 1 || passportData.ExpirationDate[0] > 30) { checkStatus =  CheckStatus.Wrong; }
         if (checkStatus != CheckStatus.Wrong && 
-            (passPortData.ExpirationDate[1] < 1 || passPortData.ExpirationDate[1] > 12)) { checkStatus =  CheckStatus.Wrong; }
+            (passportData.ExpirationDate[1] < 1 || passportData.ExpirationDate[1] > 12)) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            (passPortData.DateOfCreation[0] < 1 || passPortData.DateOfCreation[0] > 30)) { checkStatus =  CheckStatus.Wrong; }
+            (passportData.DateOfCreation[0] < 1 || passportData.DateOfCreation[0] > 30)) { checkStatus =  CheckStatus.Wrong; }
         if (checkStatus != CheckStatus.Wrong && 
-            (passPortData.DateOfCreation[1] < 1 || passPortData.DateOfCreation[1] > 12)) { checkStatus =  CheckStatus.Wrong; }
+            (passportData.DateOfCreation[1] < 1 || passportData.DateOfCreation[1] > 12)) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            (passPortData.DateOfBirth[0] < 1 || passPortData.DateOfBirth[0] > 30)) { checkStatus =  CheckStatus.Wrong; }
+            (passportData.DateOfBirth[0] < 1 || passportData.DateOfBirth[0] > 30)) { checkStatus =  CheckStatus.Wrong; }
         if (checkStatus != CheckStatus.Wrong && 
-            (passPortData.DateOfBirth[1] < 1 || passPortData.DateOfBirth[1] > 12)) { checkStatus =  CheckStatus.Wrong; }
+            (passportData.DateOfBirth[1] < 1 || passportData.DateOfBirth[1] > 12)) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if expiration date of passport is before the current date
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.ExpirationDate[2] < _currentDay[2]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.ExpirationDate[2] < _currentDay[2]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.ExpirationDate[2] == _currentDay[2] &&
-            passPortData.ExpirationDate[1] < _currentDay[1]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.ExpirationDate[2] == _currentDay[2] &&
+            passportData.ExpirationDate[1] < _currentDay[1]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.ExpirationDate[2] == _currentDay[2] &&
-            passPortData.ExpirationDate[1] == _currentDay[1] &&
-            passPortData.ExpirationDate[0] < _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.ExpirationDate[2] == _currentDay[2] &&
+            passportData.ExpirationDate[1] == _currentDay[1] &&
+            passportData.ExpirationDate[0] < _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if the date of creation of passport is after the current date
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfCreation[2] > _currentDay[2]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfCreation[2] > _currentDay[2]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfCreation[2] == _currentDay[2] &&
-            passPortData.DateOfCreation[1] > _currentDay[1]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfCreation[2] == _currentDay[2] &&
+            passportData.DateOfCreation[1] > _currentDay[1]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfCreation[2] == _currentDay[2] &&
-            passPortData.DateOfCreation[1] == _currentDay[1] &&
-            passPortData.DateOfCreation[0] > _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfCreation[2] == _currentDay[2] &&
+            passportData.DateOfCreation[1] == _currentDay[1] &&
+            passportData.DateOfCreation[0] > _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if the date of birth of passport is after the current date
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfBirth[2] > _currentDay[2]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfBirth[2] > _currentDay[2]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfBirth[2] == _currentDay[2] &&
-            passPortData.DateOfBirth[1] > _currentDay[1]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfBirth[2] == _currentDay[2] &&
+            passportData.DateOfBirth[1] > _currentDay[1]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfBirth[2] == _currentDay[2] &&
-            passPortData.DateOfBirth[1] == _currentDay[1] &&
-            passPortData.DateOfBirth[0] > _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfBirth[2] == _currentDay[2] &&
+            passportData.DateOfBirth[1] == _currentDay[1] &&
+            passportData.DateOfBirth[0] > _currentDay[0]) { checkStatus =  CheckStatus.Wrong; }
         
         // Check if the date of birth of passport is after date of creation
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfBirth[2] > passPortData.DateOfCreation[2]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfBirth[2] > passportData.DateOfCreation[2]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfBirth[2] == passPortData.DateOfCreation[2] &&
-            passPortData.DateOfBirth[1] > passPortData.DateOfCreation[1]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfBirth[2] == passportData.DateOfCreation[2] &&
+            passportData.DateOfBirth[1] > passportData.DateOfCreation[1]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.DateOfBirth[2] == passPortData.DateOfCreation[2] &&
-            passPortData.DateOfBirth[1] == passPortData.DateOfCreation[1] &&
-            passPortData.DateOfBirth[0] > passPortData.DateOfCreation[0]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.DateOfBirth[2] == passportData.DateOfCreation[2] &&
+            passportData.DateOfBirth[1] == passportData.DateOfCreation[1] &&
+            passportData.DateOfBirth[0] > passportData.DateOfCreation[0]) { checkStatus =  CheckStatus.Wrong; }
         
         // Check if expiration date of passport is before date of creation
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.ExpirationDate[2] < passPortData.DateOfCreation[2]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.ExpirationDate[2] < passportData.DateOfCreation[2]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.ExpirationDate[2] == passPortData.DateOfCreation[2] &&
-            passPortData.ExpirationDate[1] < passPortData.DateOfCreation[1]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.ExpirationDate[2] == passportData.DateOfCreation[2] &&
+            passportData.ExpirationDate[1] < passportData.DateOfCreation[1]) { checkStatus =  CheckStatus.Wrong; }
 
         if (checkStatus != CheckStatus.Wrong && 
-            passPortData.ExpirationDate[2] == passPortData.DateOfCreation[2] &&
-            passPortData.ExpirationDate[1] == passPortData.DateOfCreation[1] &&
-            passPortData.ExpirationDate[0] < passPortData.DateOfCreation[0]) { checkStatus =  CheckStatus.Wrong; }
+            passportData.ExpirationDate[2] == passportData.DateOfCreation[2] &&
+            passportData.ExpirationDate[1] == passportData.DateOfCreation[1] &&
+            passportData.ExpirationDate[0] < passportData.DateOfCreation[0]) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if Passport has the right Color
-        //if (checkStatus != CheckStatus.Wrong && 
-            //(int)passPortData.PassType != (int)passPortData.PassColor) { checkStatus =  CheckStatus.Wrong; }
+        if (checkStatus != CheckStatus.Wrong && 
+            (int)passportData.PassType != (int)passportData.PassColor) { checkStatus =  CheckStatus.Wrong; }
 
         // Check if country is forbidden
         if (checkStatus != CheckStatus.Wrong && (_currentRules & Rules.Land) != 0)
         {
-            if (_currentCountryDenied.Contains(passPortData.Country)) { checkStatus =  CheckStatus.Wrong; }
+            if (_currentCountryDenied.Contains(passportData.Country)) { checkStatus =  CheckStatus.Wrong; }
         }
 
         // Check if passport type is forbidden
         if (checkStatus != CheckStatus.Wrong && (_currentRules & Rules.PassType) != 0)
         {
-            if (_currentPpTypesDenied.Contains(passPortData.PassType)) { checkStatus =  CheckStatus.Wrong; }
+            if (_currentPpTypesDenied.Contains(passportData.PassType)) { checkStatus =  CheckStatus.Wrong; }
+        }
+        
+        // Check if passport person is wanted
+        if (checkStatus != CheckStatus.Wrong && passportData.Wanted)
+        {
+            checkStatus = CheckStatus.Wrong;
         }
 
+        return checkStatus;
+    }
+
+    /// <summary>
+    /// Checks the content of the given passport data and show the validation result
+    /// </summary>
+    /// <param name="passportData">data to check</param>
+    private void PassportCheck(PassPortData passportData)
+    {
+        // Check if passportData is null
+        if (passportData == null)
+        {
+            print("Passport data empty!");
+            return; 
+        }
+
+        // Check passport data
+        CheckStatus checkStatus = PassportDataCheck(passportData);
+
+        if (checkStatus == CheckStatus.None)
+        {
+            print("Passport data empty after data check!");
+            return;
+        }
+
+        // shows the result whether the data is valid or not
         checkStatus = checkStatus == _visaStatus ? CheckStatus.Correct : CheckStatus.Wrong;
         ChangeCheckLight(checkStatus);
         GameEvents.current.VisaCheckSound(checkStatus);
@@ -380,20 +441,22 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartCountdownLightOff());
     }
 
+    /// <summary>
+    /// Deactivate the check light after a specific time
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator StartCountdownLightOff()
     {
         yield return new WaitForSeconds(3);
         ChangeCheckLight(CheckStatus.None);
     }
 
+    /// <summary>
+    /// Checks if the current person is wanted or not
+    /// </summary>
     void WantedPerson()
     {
-        CheckStatus checkStatus = CheckStatus.None;
-        //int faceofpass = 0; //TODO
-        if (Wanted.MFaceCount != PassPort.mFaceIndex)
-        {
-            checkStatus = CheckStatus.Wrong;
-        }else checkStatus = CheckStatus.Correct;
+        CheckStatus checkStatus = Wanted.MFaceCount != PassPort.mFaceIndex ? CheckStatus.Wrong : CheckStatus.Correct;
 
         ChangeCheckLight(checkStatus);
         AddScore(checkStatus);
@@ -402,11 +465,16 @@ public class GameManager : MonoBehaviour
         StartCoroutine(StartCountdownLightOff());
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
+    /// <summary>
+    /// Spawns a new person
+    /// </summary>
     void SpawnPerson()
     {
         if (!tm.IsDayEnd())
         {
-            Vector3 start = new Vector3(personStart.position.x, 0.4350001f, personStart.position.z);
+            var position = personStart.position;
+            Vector3 start = new Vector3(position.x, 0.4350001f, position.z);
             _currentPerson = Instantiate(person, start, Quaternion.Euler(0,180,0));
             GameEvents.current.NewPersonSpawned(_currentPerson.GetComponent<Person>());
         }
@@ -415,14 +483,17 @@ public class GameManager : MonoBehaviour
             nextDayButton.SetActive(true);
         }  
     }
-    
-    
 
+    /// <summary>
+    /// Is called if this script is destroyed
+    ///     -unsubscribe game events 
+    /// </summary>
     private void OnDestroy()
     {
         GameEvents.current.onSpawnNewPerson -= SpawnPerson;
         GameEvents.current.onVisaStatus -= ChangeVisaStatus;
         GameEvents.current.onTriggerPassCheck -= PassportCheck;
     }
-
+    
+    #endregion
 }

@@ -1,14 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
+/// <summary>
+/// Resets the position of colliding objects
+/// </summary>
 public class ResetPosition : MonoBehaviour
 {
+    #region Variables
+    
     [SerializeField] private GameObject resetPoint;
     [SerializeField] private string resetTag;
     private static Vector3 _offset = new Vector3(0, 0, 0);
+    
+    #endregion
+    
+    #region Functions
+    
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag(resetTag)) return;
@@ -18,6 +24,9 @@ public class ResetPosition : MonoBehaviour
         SetOffset();
     }
 
+    /// <summary>
+    /// Sets an offset to each object which resets
+    /// </summary>
     private static void SetOffset()
     {
         _offset.z += 0.2f;
@@ -26,4 +35,6 @@ public class ResetPosition : MonoBehaviour
             _offset.z = 0;
         }
     }
+    
+    #endregion
 }

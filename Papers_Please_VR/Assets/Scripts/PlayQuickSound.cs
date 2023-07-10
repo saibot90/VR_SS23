@@ -7,31 +7,31 @@
 public class PlayQuickSound : MonoBehaviour
 {
     [Tooltip("The sound that is played")]
-    public AudioClip sound = null;
+    public AudioClip sound;
 
     [Tooltip("The volume of the sound")]
     public float volume = 1.0f;
 
     [Tooltip("The range of pitch the sound is played at (-pitch, pitch)")]
-    [Range(0, 1)] public float randomPitchVariance = 0.0f;
+    [Range(0, 1)] public float randomPitchVariance;
 
-    private AudioSource audioSource = null;
+    private AudioSource _audioSource;
 
-    private float defaultPitch = 1.0f;
+    private const float DefaultPitch = 1.0f;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     public void Play()
     {
         float randomVariance = Random.Range(-randomPitchVariance, randomPitchVariance);
-        randomVariance += defaultPitch;
+        randomVariance += DefaultPitch;
 
-        audioSource.pitch = randomVariance;
-        audioSource.PlayOneShot(sound, volume);
-        audioSource.pitch = defaultPitch;
+        _audioSource.pitch = randomVariance;
+        _audioSource.PlayOneShot(sound, volume);
+        _audioSource.pitch = DefaultPitch;
     }
 
     private void OnValidate()
