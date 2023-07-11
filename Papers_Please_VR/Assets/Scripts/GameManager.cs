@@ -466,6 +466,7 @@ public class GameManager : MonoBehaviour
             GameEvents.current.NewWantedPerson();
         }
         ChangeCheckLight(checkStatus);
+        GameEvents.current.VisaCheckSound(checkStatus);
         AddScore(checkStatus);
         ShowScore();
 
