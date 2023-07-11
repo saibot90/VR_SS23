@@ -32,6 +32,7 @@ public class Person : MonoBehaviour
     private GameObject _visaObject;
     
     private bool _gotBack = false;
+    private bool _PersonIsPresent = false;
 
     private int _faceNumber;
 
@@ -126,6 +127,7 @@ public class Person : MonoBehaviour
                 {
                     _passPortObject.GetComponent<Rigidbody>().useGravity = true;
                     _reachedPositionPassport = true;
+                    _PersonIsPresent = true;
                 }
 
                 if (_visaObject != null && _visaObject.transform.position == visaPosition.position)
@@ -149,6 +151,7 @@ public class Person : MonoBehaviour
                     _to = Quaternion.Euler(0,180,0);
                     transform.rotation = Quaternion.Lerp(_from, _to, _timeCount * SpeedTurning);
                     _timeCount = _timeCount + Time.deltaTime;
+                    _PersonIsPresent = false;
                 }
             }
             else
@@ -219,10 +222,7 @@ public class Person : MonoBehaviour
     /// Bool for if the person stands directly in front of the glass
     /// </summary>
     /// <returns>bool if the person is in front</returns>
-    public bool PersonPresent()
-    {
-        return _index == (movePositionTransform.Length - 2);
-    }
+    public bool PersonPresent() { return _PersonIsPresent; }
 
     public GameObject GetPassPort() { return _passPortObject; }
     public GameObject GetVisa() {return _visaObject; }

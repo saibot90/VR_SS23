@@ -23,6 +23,7 @@ public class ButtomVR : MonoBehaviour
     private void FindPerson(Person person)
     {
         _person = person;
+        _pressedOnce = false;
     }
 
     private void OnTriggerEnter(Collider other)
