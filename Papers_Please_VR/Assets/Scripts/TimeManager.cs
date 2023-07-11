@@ -11,7 +11,7 @@ public class TimeManager : MonoBehaviour
 
     private const float DayDuration = 300f; // in seconds
 
-    private float _currentTime = 121;
+    private float _currentTime = 301f;
     
     #endregion
 
