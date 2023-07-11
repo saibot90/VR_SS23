@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
     
     private const int HoursInDay = 12, MinutesInHour = 60;
 
-    private const float DayDuration = 300f; // in seconds
+    private const float DayDuration = 180f; // in seconds
 
     private float _currentTime = 121;
     
