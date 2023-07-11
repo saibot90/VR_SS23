@@ -120,21 +120,21 @@ public class PassPort : MonoBehaviour
         switch (passColor)
         {
                 case PassPortData.PassportColor.Red:
-                    backSideRenderer.material.color = new Color(0.5660378f,0.01868994f,0.01868994f,1);
+                    backSideRenderer.material.color = new Color(0.5188679f,0.002447496f,0.002447496f,1);
                     break;
-                case PassPortData.PassportColor.Brown:
-                    backSideRenderer.material.color = new Color(0.3301887f,0.158204f,0,1);
+                case PassPortData.PassportColor.Brown:  
+                    backSideRenderer.material.color = new Color(0.7547169f,0.359389f,0,1);
                     break;
                 case PassPortData.PassportColor.Green:
                     backSideRenderer.material.color = new Color(0,0.245283f,0.02102427f,1);
                     break;
                 case PassPortData.PassportColor.LightRed:
-                    backSideRenderer.material.color = new Color(0.8679245f,0,0,1);
+                    backSideRenderer.material.color = new Color(1,0,0,1);
                     break;
                 case PassPortData.PassportColor.Blue:
                     backSideRenderer.material.color = new Color(0,0.05400867f,0.4716981f,1);
                     break;
-                default: backSideRenderer.material.color =  new Color(0.5660378f,0.01868994f,0.01868994f,1);
+                default: backSideRenderer.material.color =  new Color(0.5188679f,0.002447496f,0.002447496f,1);
                     break;
         }
         
