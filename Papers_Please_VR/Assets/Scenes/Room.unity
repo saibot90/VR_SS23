@@ -4474,7 +4474,12 @@ PrefabInstance:
     - target: {fileID: 4436221519430196991, guid: 7c818718e39445d44a67d9afc052f6bf,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4436221519430196991, guid: 7c818718e39445d44a67d9afc052f6bf,
+        type: 3}
+      propertyPath: m_LeftHandSnapTurnAction.m_UseReference
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4595420399941192706, guid: 7c818718e39445d44a67d9afc052f6bf,
         type: 3}
