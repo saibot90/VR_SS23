@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshPro[] currentDayDisplay;
     [SerializeField] private GameObject person;
     [SerializeField] private GameObject nextDayButton;
-    [SerializeField] private GameObject startButton;
     [SerializeField] private Transform personStart;
 
     [Flags]
@@ -125,7 +124,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        startButton.SetActive(false);
         GameEvents.current.TriggerNextDay();
         GameEvents.current.SpawnNewPerson();//SpawnPerson();
         _correctToday = 0;
@@ -405,6 +403,12 @@ public class GameManager : MonoBehaviour
         {
             checkStatus = CheckStatus.Wrong;
         }
+        
+        // Check if passport person and passport have the same face
+        if (checkStatus != CheckStatus.Wrong && passportData.IncorrectFace)
+        {
+            checkStatus = CheckStatus.Wrong;
+        }
 
         return checkStatus;
     }
@@ -456,7 +460,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void WantedPerson()
     {
-        CheckStatus checkStatus = Wanted.MFaceCount != PassPort.mFaceIndex ? CheckStatus.Wrong : CheckStatus.Correct;
+        CheckStatus checkStatus = Wanted.MFaceCount != PassPort.MFaceIndex ? CheckStatus.Wrong : CheckStatus.Correct;
         if (checkStatus == CheckStatus.Correct)
         {
             GameEvents.current.NewWantedPerson();

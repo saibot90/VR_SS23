@@ -24,7 +24,7 @@ public class Computer : MonoBehaviour
         if (info.Country == PassPortData.Countries.None)
         {
             facePath = "Faces/Placeholder"; 
-        }else facePath = "Faces/face" + PassPort.mFaceIndex; 
+        }else facePath = "Faces/face" + PassPort.MFaceIndex; 
         m_Faces = Resources.Load(facePath) as Material;
         m_Picture.GetComponent<Renderer>().material = m_Faces; 
         textMeshPro.text = info.PassType.ToString() + "     " + info.Country.ToString() + "<br><br>";

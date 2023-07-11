@@ -67,6 +67,8 @@ public class PassPortData
     public PassportColor PassColor { get; set; }
     public bool Wanted { get; set; }
     
+    public bool IncorrectFace { get; set; }
+    
     #endregion
     
     #region Constructors
@@ -85,6 +87,7 @@ public class PassPortData
         PassType = PassportTypes.None;
         PassColor = PassportColor.None;
         Wanted = false;
+        IncorrectFace = false;
     }
 
     /// <summary>
@@ -99,7 +102,7 @@ public class PassPortData
     /// <param name="passType">Type of the passport <see cref="PassportTypes"/></param>
     /// <param name="passColor">Color of the passport <see cref="PassportColor"/></param>
     /// <param name="wanted">Is the Person wanted or not</param>
-    public PassPortData(Countries country, string firstName, string lastName, Vector3Int expirationDate, Vector3Int dateOfCreation, Vector3Int dateOfBirth, PassportTypes passType, PassportColor passColor, bool wanted)
+    public PassPortData(Countries country, string firstName, string lastName, Vector3Int expirationDate, Vector3Int dateOfCreation, Vector3Int dateOfBirth, PassportTypes passType, PassportColor passColor, bool wanted, bool incorrectFace)
     {
         Country = country;
         FirstName = firstName;
@@ -110,6 +113,7 @@ public class PassPortData
         PassType = passType;
         PassColor = passColor;
         Wanted = wanted;
+        IncorrectFace = incorrectFace;
     }
     
     #endregion

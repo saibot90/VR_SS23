@@ -54,10 +54,11 @@ public class PassPort : MonoBehaviour
     [SerializeField] private GameObject m_BackSide;
     
     //variables used for the picture (face)
-    Material m_Faces;
-    public static int mFaceIndex;
-    private int lastWantedFace;
-    private bool wantedUsed;
+    Material _mFaces;
+    public static int MFaceIndex;
+    private int _lastWantedFace;
+    private bool _wantedUsed;
+    private bool _mIncorrectFace = false;
     
     //for loading the json text file
     string textDataName = "NameList2.json";//"NameList.json";
@@ -69,18 +70,15 @@ public class PassPort : MonoBehaviour
         GameEvents.current.onTriggerInfo += ReaderHit;
         GameEvents.current.onTriggerPassBack += getPassInfo;
         
-        //Loading the face of the person to be same on the pass
-        mFaceIndex = Person.mFaceIndex;
-        string facePath = "Faces/face" + mFaceIndex;
-        m_Faces = Resources.Load(facePath) as Material;
-        m_Picture.GetComponent<Renderer>().material = m_Faces; 
-        datapath = Application.dataPath + "/Resources/" + textDataName;
+        //Taking the face of the person so they are the same
+        MFaceIndex = Person.mFaceIndex;
+        
         
         //initiating the pass data with correct data
-        int correctPass = Random.Range(1, 100);
-        expirationDate = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2024, 2040));
-        dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(2015, 2022));
-        dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2022));
+        int correctPass = Random.Range(1, 101);
+        expirationDate = new Vector3Int(Random.Range(1, 30), Random.Range(1, 13), Random.Range(2024, 2040));
+        dateOfcreation = new Vector3Int(Random.Range(1, 29), Random.Range(1, 13), Random.Range(2015, 2023));
+        dateOfBirth = new Vector3Int(Random.Range(1, 29), Random.Range(1, 12), Random.Range(1920, 2023));
         country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
         int temp = Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportTypes)).Cast<PassPortData.PassportTypes>().Max() + 1);
         passType = (PassPortData.PassportTypes)temp;
@@ -89,13 +87,20 @@ public class PassPort : MonoBehaviour
         //overwriting pass data with incorrect data if pass is wrong
         switch (correctPass)
         {
-            case <85:
+            case <82:
                 break;
-            case >=85 and <=87: expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
+            case >=82 and <=84:
+                while (MFaceIndex == Person.mFaceIndex)
+                {
+                    MFaceIndex = Random.Range(1, 33);
+                    _mIncorrectFace = true;
+                }
                 break;
-            case <=90: dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1100, 4022));
+            case <=87: expirationDate = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(2000, 2022));
                 break;
-            case <=93: dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1120, 4022));
+            case <=90: dateOfcreation = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1800, 3020));
+                break;
+            case <=93: dateOfBirth = new Vector3Int(Random.Range(1, 31), Random.Range(1, 13), Random.Range(1800, 3020));
                 break;
             case <=96: country = (PassPortData.Countries) Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.Countries)).Cast<PassPortData.Countries>().Max() + 1);
                 break;
@@ -103,6 +108,12 @@ public class PassPort : MonoBehaviour
                 passColor = (PassPortData.PassportColor)Random.Range(1, (int) Enum.GetValues(typeof(PassPortData.PassportColor)).Cast<PassPortData.PassportColor>().Max() + 1);
                 break;
         }
+        
+        //
+        string facePath = "Faces/face" + MFaceIndex;
+        _mFaces = Resources.Load(facePath) as Material;
+        m_Picture.GetComponent<Renderer>().material = _mFaces; 
+        datapath = Application.dataPath + "/Resources/" + textDataName;
 
         //changing backside color to the right pass color
         var backSideRenderer = m_BackSide.GetComponent<Renderer>();
@@ -128,13 +139,11 @@ public class PassPort : MonoBehaviour
         }
         
         //loading names from a json text file
-        Names names;
-        LastNames lastNames;
         if (File.Exists(datapath))
         {
             string fileContents = File.ReadAllText(datapath);
-            names = JsonUtility.FromJson<Names>(fileContents);
-            lastNames = JsonUtility.FromJson<LastNames>(fileContents);
+            Names names = JsonUtility.FromJson<Names>(fileContents);
+            LastNames lastNames = JsonUtility.FromJson<LastNames>(fileContents);
             
             int rand = Random.Range(0, names.nameList.Length - 1);
             passName = names.nameList[rand].name;
@@ -160,7 +169,7 @@ public class PassPort : MonoBehaviour
     /// </summary>
     void ReaderHit()
     {
-        GameEvents.current.Info(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted));
+        GameEvents.current.Info(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted, _mIncorrectFace));
     }
 
     /// <summary>
@@ -168,7 +177,7 @@ public class PassPort : MonoBehaviour
     /// </summary>
     void getPassInfo()
     {
-        GameEvents.current.TriggerPassCheck(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted));
+        GameEvents.current.TriggerPassCheck(new PassPortData(country, passName, passLastName, expirationDate, dateOfcreation, dateOfBirth, passType, passColor, wanted, _mIncorrectFace));
     }
 
     //Unsubscribe from events
