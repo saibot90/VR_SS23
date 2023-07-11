@@ -157,7 +157,7 @@ public class PassPort : MonoBehaviour
 
         //writing pass data to textfield on the pass
         m_TextMeshPro.text = "Type " + passType.ToString() + "<br><br>";
-        m_TextMeshPro.text += "LastName " + passLastName + "     Name " + passName + "<br><br>";
+        m_TextMeshPro.text += "LastName " + passLastName + "<br><br>" + "Name " + passName + "<br><br>";
         m_TextMeshPro.text += "Date of Birth " + dateOfBirth.x + "/" + dateOfBirth.y +"/" + dateOfBirth.z + "<br><br>";
         m_TextMeshPro.text += "Expires "+ expirationDate.x + "/" + expirationDate.y +"/" + expirationDate.z + "<br><br>";
         m_TextMeshPro.text += "Issued " + dateOfcreation.x + "/" + dateOfcreation.y +"/" + dateOfcreation.z;
