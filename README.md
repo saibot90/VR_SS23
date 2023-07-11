@@ -18,8 +18,8 @@ Aktuell beinhaltet unser Spiel folgende Punkte:
     - kann in ein Kartenlesegerät gesteckt werden
     - wenn in roten Bereich gelegt, geht Person nach ein paar Sekunden
     - Beinhaltet Informationen über die Person und des Ausweises
-    - Hat ein Bild
-    - Hat verschiedene Farben
+    - Hat ein Bild, welches sich auch von der Person unterscheiden kann.
+    - Hat verschiedene Farben für jeden Typ einen.
 - Exit Button zum verlassen des Spieles
 - Button um die Person als Wanted zu Kennzeichnen, welche dann direkt geht
 - Infos von Ausweisen auf einem Bildschirm ausgeben
